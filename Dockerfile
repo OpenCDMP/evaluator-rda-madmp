@@ -20,6 +20,6 @@ ARG PROFILE
 ENV SERVER_PORT=8080
 EXPOSE ${SERVER_PORT}
 
-COPY --from=build-stage /build/web/target/evaluator-web-1.0.0-SNAPSHOT.jar /app/evaluator-web.jar
+COPY --from=build-stage /build/web/target/evaluator-rda-maDMP-web-1.0.0-SNAPSHOT.jar /app/evaluator-web.jar
 
 ENTRYPOINT ["java","-Dspring.config.additional-location=file:/config/","-Dspring.profiles.active=${PROFILE}","-Djava.security.egd=file:/dev/./urandom","-jar","/app/evaluator-web.jar"]

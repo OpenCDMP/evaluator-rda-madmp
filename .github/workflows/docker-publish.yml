@@ -28,7 +28,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: opencdmp/repository-deposit-zenodo
+          images: opencdmp/evaluator-rda-madmp
           tags: |
             type=semver,pattern={{version}}
           

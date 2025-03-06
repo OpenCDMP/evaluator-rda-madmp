@@ -5,19 +5,18 @@
     <parent>
         <groupId>org.opencdmp</groupId>
         <artifactId>evaluator-rda-maDMP-parent</artifactId>
-        <version>${revision}</version>
+         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>evaluator-rda-maDMP</artifactId>
-    <version>${revision}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.release>21</maven.compiler.release>
-        <revision>1.0.0-SNAPSHOT</revision>
     </properties>
 
     <dependencies>

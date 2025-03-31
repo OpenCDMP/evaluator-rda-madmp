@@ -1,6 +1,6 @@
 rda-madmp:
   evaluatorId: "rda-maDMP"
-  rdaSchema: ${RDA_MADMP_RDA_SCHEMA:classpath\\:schema/rda-schema.json}
+  rdaSchema: ${RDA_MADMP_RDA_SCHEMA:classpath:schema/rda-schema.json}
   useSharedStorage: ${RDA_MADMP_USE_SHARED_STORAGE:false}
   has-logo: ${RDA_MADMP_HAS_LOGO:true}
-  logo: ${RDA_MADMP_LOGO_PATH:classpath\\:rda.png}
+  logo: ${RDA_MADMP_LOGO_PATH:classpath:rda.png}

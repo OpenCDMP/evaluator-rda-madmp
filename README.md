@@ -28,7 +28,7 @@ This service implements the following endpoints as per `EvaluatorController`:
 ```bash
 POST /rank/plan
 {
-    "planModel": { ... }
+    "PlanEvaluationModel": { ... }
 }
 ```
 
@@ -39,7 +39,7 @@ POST /rank/plan
 ```bash
 POST /rank/description
 {
-    "descriptionModel": { ... }
+    "DescriptionEvaluationModel": { ... }
 }
 ```
 
@@ -66,7 +66,7 @@ To evaluate a plan for RDA compliance:
 ```bash
 POST /rank/plan
 {
-    "planModel": { ... }
+    "PlanEvaluationModel": { ... }
 }
 ```
 
@@ -75,7 +75,7 @@ To evaluate a description for RDA compliance:
 ```bash
 POST /rank/description
 {
-    "descriptionModel": { ... }
+    "DescriptionEvaluationModel": { ... }
 }
 ```
 

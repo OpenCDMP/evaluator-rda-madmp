@@ -1,7 +1,7 @@
 package org.opencdmp.evaluator.rdamadmp.service.evaluator;
 
-import org.opencdmp.evaluatorbase.enums.EvaluatorEntityType;
-import org.opencdmp.evaluatorbase.models.misc.RankConfig;
+import org.opencdmp.commonmodels.models.ConfigurationField;
+import org.opencdmp.evaluatorbase.interfaces.BenchmarkConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
@@ -13,6 +13,9 @@ public class EvaluatorRdaMaDmpServiceProperties {
 	private String logo;
 	private boolean hasLogo;
 	private String rdaSchema;
+	private List<ConfigurationField> configurationFields;
+	private List<ConfigurationField> userConfigurationFields;
+	private List<BenchmarkConfiguration> availableBenchmarks;
 
 	public String getEvaluatorId() {
 		return evaluatorId;
@@ -52,5 +55,30 @@ public class EvaluatorRdaMaDmpServiceProperties {
 
 	public void setRdaSchema(String rdaSchema) {
 		this.rdaSchema = rdaSchema;
+	}
+
+	public List<ConfigurationField> getConfigurationFields() {
+		return configurationFields;
+	}
+
+	public void setConfigurationFields(List<ConfigurationField> configurationFields) {
+		this.configurationFields = configurationFields;
+	}
+
+	public List<ConfigurationField> getUserConfigurationFields() {
+		return userConfigurationFields;
+	}
+
+	public void setUserConfigurationFields(List<ConfigurationField> userConfigurationFields) {
+		this.userConfigurationFields = userConfigurationFields;
+	}
+
+	public List<BenchmarkConfiguration> getAvailableBenchmarks() {
+
+		return availableBenchmarks;
+	}
+
+	public void setAvailableBenchmarks(List<BenchmarkConfiguration> availableBenchmarks) {
+		this.availableBenchmarks = availableBenchmarks;
 	}
 }

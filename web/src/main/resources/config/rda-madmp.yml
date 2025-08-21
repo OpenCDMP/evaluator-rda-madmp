@@ -4,3 +4,10 @@ rda-madmp:
   useSharedStorage: ${RDA_MADMP_USE_SHARED_STORAGE:false}
   has-logo: ${RDA_MADMP_HAS_LOGO:true}
   logo: ${RDA_MADMP_LOGO_PATH:classpath:rda.png}
+  configurationFields:
+  userConfigurationFields:
+  availableBenchmarks:
+    - id: 251128td03prl2041aq3pser
+      label: RDA MADMP Schema Validation
+      appliesTo:
+        - Plan

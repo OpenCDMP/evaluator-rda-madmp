@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: opencdmp-evaluator-rda-madmp-api
   jackson:
     default-property-inclusion: non_null
   config:
@@ -8,5 +10,6 @@ spring:
       optional:classpath:config/cache.yml[.yml], optional:classpath:config/cache-${spring.profiles.active}.yml[.yml], optional:file:../config/cache-${spring.profiles.active}.yml[.yml],
       optional:classpath:config/logging.yml[.yml], optional:classpath:config/logging-${spring.profiles.active}.yml[.yml], optional:file:../config/logging-${spring.profiles.active}.yml[.yml],
       optional:classpath:config/rda-madmp.yml[.yml], optional:classpath:config/rda-madmp-${spring.profiles.active}.yml[.yml], optional:file:../config/rda-madmp-${spring.profiles.active}.yml[.yml],
-      optional:classpath:config/idpclaims.yml[.yml], optional:classpath:config/idpclaims-${spring.profiles.active}.yml[.yml], optional:file:../config/idpclaims-${spring.profiles.active}.yml[.yml]
+      optional:classpath:config/idpclaims.yml[.yml], optional:classpath:config/idpclaims-${spring.profiles.active}.yml[.yml], optional:file:../config/idpclaims-${spring.profiles.active}.yml[.yml],
+      optional:classpath:config/management.yml[.yml], optional:classpath:config/management-${spring.profiles.active}.yml[.yml], optional:file:../config/management-${spring.profiles.active}.yml[.yml]
 

@@ -11,6 +11,7 @@ The **evaluator-rda-madmp** service evaluates the compliance of exported Plans a
 - **JSON Evaluation**: Validate and rank DMPs and  exported to RDA-compliant JSON.
 - **Schema Compliance**: Checks whether the plan adheres to the RDA DMP Common Standard for maDMPs.
 - **Spring Boot Microservice**: Built as a Spring Boot microservice for integration with the OpenCDMP platform.
+- **maDMP JSON Schema Version**: Validate maDMP JSON Schema **v1.2**.
 
 **Supported operations:**
 - ✅ Validate and rank plans

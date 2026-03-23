@@ -1,7 +1,5 @@
 package org.opencdmp.evaluator.rdamadmp.service.evaluator;
 
-
-import com.sun.jdi.InvalidTypeException;
 import gr.cite.tools.exception.MyApplicationException;
 import gr.cite.tools.logging.LoggerService;
 import org.apache.commons.io.IOUtils;
@@ -51,7 +49,7 @@ public class EvaluatorService implements EvaluatorClient {
 
 
     @Override
-    public RankResultModel rankPlan(PlanEvaluationModel plan) throws InvalidApplicationException, IOException, InvalidTypeException {
+    public RankResultModel rankPlan(PlanEvaluationModel plan) {
         if (plan == null || plan.getPlanModel() == null || plan.getPlanModel().getRdaJsonFile() == null ||  plan.getPlanModel().getRdaJsonFile().getFile() == null) throw new MyApplicationException("rda file not found!");
 
         if (plan.getBenchmarkIds() == null || plan.getBenchmarkIds().isEmpty()) throw new MyApplicationException("benchmark ids are empty!");
@@ -135,7 +133,7 @@ public class EvaluatorService implements EvaluatorClient {
     }
 
     @Override
-    public RankResultModel rankDescription(DescriptionEvaluationModel description) throws InvalidApplicationException, IOException {
+    public RankResultModel rankDescription(DescriptionEvaluationModel description) {
         throw new UnsupportedOperationException("rank description not supported");
     }
 

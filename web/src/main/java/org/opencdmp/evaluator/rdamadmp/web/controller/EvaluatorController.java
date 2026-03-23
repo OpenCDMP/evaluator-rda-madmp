@@ -34,7 +34,7 @@ public class EvaluatorController implements org.opencdmp.evaluatorbase.interface
     }
 
     @Override
-    public RankResultModel rankPlan(@RequestBody PlanEvaluationModel planModel) throws Exception {
+    public RankResultModel rankPlan(@RequestBody PlanEvaluationModel planModel) {
 
          logger.debug(new MapLogEntry("rankPlan" + PlanModel.class.getSimpleName()).And("planModel", planModel));
 
@@ -48,7 +48,7 @@ public class EvaluatorController implements org.opencdmp.evaluatorbase.interface
     }
 
     @Override
-    public RankResultModel rankDescription(@RequestBody DescriptionEvaluationModel descriptionModel) throws Exception {
+    public RankResultModel rankDescription(@RequestBody DescriptionEvaluationModel descriptionModel) {
 
         logger.debug(new MapLogEntry("rankDescription " + DescriptionModel.class.getSimpleName()).And("descriptionModel", descriptionModel));
 

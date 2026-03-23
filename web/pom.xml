@@ -6,12 +6,12 @@
         <groupId>org.opencdmp</groupId>
         <artifactId>evaluator-rda-maDMP-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-	<relativePath>../pom.xml</relativePath>
+		<relativePath>../pom.xml</relativePath>
     </parent>
 
 	<artifactId>evaluator-rda-maDMP-web</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+    <packaging>jar</packaging>
 
 	<properties>
 		<maven.compiler.source>21</maven.compiler.source>
@@ -23,7 +23,7 @@
     <dependencies>
 		<dependency>
 			<groupId>org.opencdmp</groupId>
-			<artifactId>evaluator-rda-maDMP</artifactId>
+			<artifactId>evaluator-rda-maDMP</artifactId> <!--That is the dependency with the transitive vulnerability. Fixed it with the dependency addition below.-->
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
         <dependency>
@@ -33,12 +33,12 @@
 		<dependency>
 			<groupId>gr.cite</groupId>
 			<artifactId>oidc-authn</artifactId>
-			<version>2.2.2</version>
+			<version>4.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>gr.cite</groupId>
 			<artifactId>cache</artifactId>
-			<version>2.2.0</version>
+			<version>4.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -1,1000 +1,1156 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/RDA-DMP-Common/RDA-DMP-Common-Standard/tree/master/examples/JSON/JSON-schema/1.1",
-  "title": "RDA DMP Common Standard Schema",
-  "description": "JSON Schema for the RDA DMP Common Standard",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RDA-DMP-Common/RDA-DMP-Common-Standard/tree/master/examples/JSON/JSON-schema/1.2",
+  "title": "RDA DMP Common Standard for machine-actionable Data Management Plans",
+  "description": "This is a metadata application profile to provide basic interoperability between systems producing or consuming machine-actionable data management plans (maDMPS). Further fields can be added in specific deployments, but they do not guarantee interoperability. DMP tools can use any other fields in their internal data models.\n\nThis application profile is intended to cover a wide range of use cases and does not set any business (e.g. funder specific) requirements. It represents information over the whole DMP lifecycle.",
   "type": "object",
   "properties": {
     "dmp": {
-      "$id": "#/properties/dmp",
+      "$ref": "#/$defs/DMPData"
+    }
+  },
+  "required": ["dmp"],
+  "$defs": {
+    "Affiliation": {
       "type": "object",
-      "title": "The DMP Schema",
+      "title": "Affiliation",
       "properties": {
-        "contact": {
-          "$id": "#/properties/dmp/properties/contact",
-          "type": "object",
-          "title": "The DMP Contact Schema",
-          "properties": {
-            "contact_id": {
-              "$id": "#/properties/dmp/properties/contact/properties/contact_id",
-              "type": "object",
-              "title": "The Contact ID Schema",
-              "properties": {
-                "identifier": {
-                  "$id": "#/properties/dmp/properties/contact/properties/contact_id/properties/identifier",
-                  "type": "string",
-                  "title": "The DMP Contact Identifier Schema",
-                  "examples": ["https://orcid.org/0000-0003-0644-4174"]
-                },
-                "type": {
-                  "$id": "#/properties/dmp/properties/contact/properties/contact_id/properties/type",
-                  "type": "string",
-                  "enum": [
-                    "orcid",
-                    "isni",
-                    "openid",
-                    "other"
-                  ],
-                  "title": "The DMP Contact Identifier Type Schema",
-                  "description": "Identifier type. Allowed values: orcid, isni, openid, other",
-                  "examples": ["orcid"]
-                }
-              },
-              "required": [
-                "identifier",
-                "type"
-              ]
-            },
-            "mbox": {
-              "$id": "#/properties/dmp/properties/contact/properties/mbox",
-              "type": "string",
-              "format": "email",
-              "title": "The Mailbox Schema",
-              "description": "Contact Person's E-mail address",
-              "examples": ["cc@example.com"]
-            },
-            "name": {
-              "$id": "#/properties/dmp/properties/contact/properties/name",
-              "type": "string",
-              "title": "The Name Schema",
-              "description": "Name of the contact person",
-              "examples": ["Charlie Chaplin"]
-            }
-          },
-          "required": [
-            "contact_id",
-            "mbox",
-            "name"
+        "affiliation_id": {
+          "$ref": "#/$defs/AffiliationID"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Name of the affiliation",
+          "examples": [
+            "Some University"
+          ]
+        }
+      },
+      "required": [
+        "affiliation_id",
+        "name"
+      ]
+    },
+    "AffiliationID": {
+      "type": "object",
+      "title": "Affiliation ID",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "03yrm5c26"
           ]
         },
-        "contributor": {
-          "$id": "#/properties/dmp/properties/contributor",
-          "type": "array",
-          "title": "The Contributor Schema",
-          "items": {
-            "$id": "#/properties/dmp/properties/contributor/items",
-            "type": "object",
-            "title": "The Contributor Items Schema",
-            "properties": {
-              "contributor_id": {
-                "$id": "#/properties/dmp/properties/contributor/items/properties/contributor_id",
-                "type": "object",
-                "title": "The Contributor_id Schema",
-                "properties": {
-                  "identifier": {
-                    "$id": "#/properties/dmp/properties/contributor/items/properties/contributor_id/properties/identifier",
-                    "type": "string",
-                    "title": "The Contributor Identifier Schema",
-                    "description": "Identifier for a contact person",
-                    "examples": ["http://orcid.org/0000-0000-0000-0000"]
-                  },
-                  "type": {
-                    "$id": "#/properties/dmp/properties/contributor/items/properties/contributor_id/properties/type",
-                    "type": "string",
-                    "enum": [
-                      "orcid",
-                      "isni",
-                      "openid",
-                      "other"
-                    ],
-                    "title": "The Contributor Identifier Type Schema",
-                    "description": "Identifier type. Allowed values: orcid, isni, openid, other",
-                    "examples": ["orcid"]
-                  }
-                },
-                "required": [
-                  "identifier",
-                  "type"
-                ]
-              },
-              "mbox": {
-                "$id": "#/properties/dmp/properties/contributor/items/properties/mbox",
-                "type": "string",
-                "title": "The Contributor Mailbox Schema",
-                "description": "Contributor Mail address",
-                "examples": ["john@smith.com"],
-                "format": "email"
-              },
-              "name": {
-                "$id": "#/properties/dmp/properties/contributor/items/properties/name",
-                "type": "string",
-                "title": "The Name Schema",
-                "description": "Name of the contributor",
-                "examples": ["John Smith"]
-              },
-              "role": {
-                "$id": "#/properties/dmp/properties/contributor/items/properties/role",
-                "type": "array",
-                "title": "The Role Schema",
-                "description": "Type of contributor",
-                "items": {
-                  "$id": "#/properties/dmp/properties/contributor/items/properties/role/items",
-                  "type": "string",
-                  "title": "The Contributor Role(s) Items Schema",
-                  "examples": ["Data Steward"]
-                },
-                "uniqueItems": true
-              }
-            },
-            "required": [
-              "contributor_id",
-              "name",
-              "role"
-            ]
-          }
-        },
-        "cost": {
-          "$id": "#/properties/dmp/properties/cost",
-          "type": "array",
-          "title": "The Cost Schema",
-          "items": {
-            "$id": "#/properties/dmp/properties/cost/items",
-            "type": "object",
-            "title": "The Cost Items Schema",
-            "properties": {
-              "currency_code": {
-                "$id": "#/properties/dmp/properties/cost/items/properties/currency_code",
-                "type": "string",
-                "enum": [
-                  "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN",
-                  "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL",
-                  "BSD", "BTN", "BWP", "BYN", "BZD", "CAD", "CDF", "CHF", "CLP", "CNY",
-                  "COP", "CRC", "CUC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD",
-                  "EGP", "ERN", "ETB", "EUR", "FJD", "FKP", "GBP", "GEL", "GGP", "GHS",
-                  "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF",
-                  "IDR", "ILS", "IMP", "INR", "IQD", "IRR", "ISK", "JEP", "JMD", "JOD",
-                  "JPY", "KES", "KGS", "KHR", "KMF", "KPW", "KRW", "KWD", "KYD", "KZT",
-                  "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD",
-                  "MMK", "MNT", "MOP", "MRU", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN",
-                  "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK",
-                  "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR",
-                  "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLL", "SOS", "SPL*","SRD",
-                  "STN", "SVC", "SYP", "SZL", "THB", "TJS", "TMT", "TND",	"TOP", "TRY",
-                  "TTD", "TVD", "TWD", "TZS", "UAH", "UGX", "USD", "UYU", "UZS", "VEF",
-                  "VND", "VUV", "WST", "XAF", "XCD", "XDR", "XOF", "XPF", "YER", "ZAR",
-                  "ZMW", "ZWD"
-                ],
-                "title": "The Cost Currency Code Schema",
-                "description": "Allowed values defined by ISO 4217",
-                "examples": ["EUR"]
-              },
-              "description": {
-                "$id": "#/properties/dmp/properties/cost/items/properties/description",
-                "type": "string",
-                "title": "The Cost Description Schema",
-                "description": "Cost(s) Description",
-                "examples": ["Costs for maintaining..."]
-              },
-              "title": {
-                "$id": "#/properties/dmp/properties/cost/items/properties/title",
-                "type": "string",
-                "title": "The Cost Title Schema",
-                "description": "Title",
-                "examples": ["Storage and Backup"]
-              },
-              "value": {
-                "$id": "#/properties/dmp/properties/cost/items/properties/value",
-                "type": "number",
-                "title": "The Cost Value Schema",
-                "description": "Value",
-                "examples": [1000]
-              }
-            },
-            "required": ["title"]
-          }
-        },
-        "created": {
-          "$id": "#/properties/dmp/properties/created",
+        "type": {
           "type": "string",
-          "format": "date-time",
-          "title": "The DMP Creation Schema",
-          "description": "Date and time of the first version of a DMP. Must not be changed in subsequent DMPs. Encoded using the relevant ISO 8601 Date and Time compliant string",
-          "examples": ["2019-03-13T13:13:00"]
+          "title": "Type",
+          "description": "Identifier type. Suggested Values: ror, grid, isni, other",
+          "examples": [
+            "ror"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "AlternateIdentifier": {
+      "type": "object",
+      "title": "Alternate Identifier",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "description": "Alternate identifier value",
+          "examples": [
+            "E-GEOD-34814"
+          ]
         },
-        "dataset": {
-          "$id": "#/properties/dmp/properties/dataset",
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Type of alternate identifier",
+          "examples": [
+            "accession number",
+            "doi"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "Booleanish": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ],
+      "title": "Booleanish",
+      "description": "To indicate whether there are ethical issues related to data that this DMP describes. Allowed values: yes, no, unknown",
+      "examples": [
+        "yes"
+      ]
+    },
+    "Certification": {
+      "type": "string",
+      "enum": [
+        "din31644",
+        "dini-zertifikat",
+        "dsa",
+        "iso16363",
+        "iso16919",
+        "trac",
+        "wds",
+        "coretrustseal"
+      ],
+      "title": "Certification",
+      "description": "Repository certified to a recognised standard. Allowed values: din31644, dini-zertifikat, dsa, iso16363, iso16919, trac, wds, coretrustseal",
+      "examples": [
+        "coretrustseal"
+      ]
+    },
+    "Contact": {
+      "type": "object",
+      "title": "Contact",
+      "description": "Specifies the party which can provide any information on the DMP. This is not necessarily the DMP creator, and can be a person or an organisation.",
+      "properties": {
+        "affiliation": {
           "type": "array",
-          "title": "The Dataset Schema",
+          "title": "Affiliations",
+          "description": "Affiliation(s) of the contact",
           "items": {
-            "$id": "#/properties/dmp/properties/dataset/items",
-            "type": "object",
-            "title": "The Dataset Items Schema",
-            "properties": {
-              "data_quality_assurance": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/data_quality_assurance",
-                "type": "array",
-                "title": "The Data Quality Assurance Schema",
-                "description": "Data Quality Assurance",
-                "items": {
-                  "$id": "#/properties/dmp/properties/dataset/items/properties/data_quality_assurance/items",
-                  "type": "string",
-                  "title": "The Data Quality Assurance Schema",
-                  "examples": ["We use file naming convention..."]
-                }
-              },
-              "dataset_id": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/dataset_id",
-                "type": "object",
-                "title": "The Dataset ID Schema",
-                "description": "Dataset ID",
-                "properties": {
-                  "identifier": {
-                    "$id": "#/properties/dmp/properties/dataset/items/properties/dataset_id/properties/identifier",
-                    "type": "string",
-                    "title": "The Dataset Identifier Schema",
-                    "description": "Identifier for a dataset",
-                    "examples": ["https://hdl.handle.net/11353/10.923628"]
-                  },
-                  "type": {
-                    "$id": "#/properties/dmp/properties/dataset/items/properties/dataset_id/properties/type",
-                    "type": "string",
-                    "enum": [
-                      "handle",
-                      "doi",
-                      "ark",
-                      "url",
-                      "other"
-                    ],
-                    "title": "The Dataset Identifier Type Schema",
-                    "description": "Dataset identifier type. Allowed values: handle, doi, ark, url, other",
-                    "examples": ["handle"]
-                  }
-                },
-                "required": [
-                  "identifier",
-                  "type"
-                ]
-              },
-              "description": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/description",
-                "type": "string",
-                "title": "The Dataset Description Schema",
-                "description": "Description is a property in both Dataset and Distribution, in compliance with W3C DCAT. In some cases these might be identical, but in most cases the Dataset represents a more abstract concept, while the distribution can point to a specific file.",
-                "examples": ["Field observation"]
-              },
-              "distribution": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/distribution",
-                "type": "array",
-                "title": "The Dataset Distribution Schema",
-                "description": "To provide technical information on a specific instance of data.",
-                "items": {
-                  "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items",
-                  "type": "object",
-                  "title": "The Dataset Distribution Items Schema",
-                  "properties": {
-                    "access_url": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/access_url",
-                      "type": "string",
-                      "title": "The Dataset Distribution Access URL Schema",
-                      "description": "A URL of the resource that gives access to a distribution of the dataset. e.g. landing page.",
-                      "examples": ["http://some.repo"]
-                    },
-                    "available_until": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/available_until",
-                      "type": "string",
-                      "format": "date",
-                      "title": "The Dataset Distribution Available Until Schema",
-                      "description": "Indicates how long this distribution will be/ should be available. Encoded using the relevant ISO 8601 Date and Time compliant string.",
-                      "examples": ["2030-06-30"]
-                    },
-                    "byte_size": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/byte_size",
-                      "type": "integer",
-                      "title": "The Dataset Distribution Byte Size Schema",
-                      "description": "Size in bytes.",
-                      "examples": [690000]
-                    },
-                    "data_access": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/data_access",
-                      "type": "string",
-                      "enum": [
-                        "open",
-                        "shared",
-                        "closed"
-                      ],
-                      "title": "The Dataset Distribution Data Access Schema",
-                      "description": "Indicates access mode for data. Allowed values: open, shared, closed",
-                      "examples": ["open"]
-                    },
-                    "description": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/description",
-                      "type": "string",
-                      "title": "The Dataset Distribution Description Schema",
-                      "description": "Description is a property in both Dataset and Distribution, in compliance with W3C DCAT. In some cases these might be identical, but in most cases the Dataset represents a more abstract concept, while the distribution can point to a specific file.",
-                      "examples": ["Best quality data before resizing"]
-                    },
-                    "download_url": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/download_url",
-                      "type": "string",
-                      "format": "uri",
-                      "title": "The Dataset Distribution Download URL Schema",
-                      "description": "The URL of the downloadable file in a given format. E.g. CSV file or RDF file.",
-                      "examples": ["http://some.repo.../download/..."]
-                    },
-                    "format": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/format",
-                      "type": "array",
-                      "title": "The Dataset Distribution Format Schema",
-                      "description": "Format according to: https://www.iana.org/assignments/media-types/media-types.xhtml if appropriate, otherwise use the common name for this format.",
-                      "items": {
-                        "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/format/items",
-                        "type": "string",
-                        "title": "The Dataset Distribution Format Items Schema",
-                        "examples": ["image/tiff"]
-                      }
-                    },
-                    "host": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host",
-                      "type": "object",
-                      "title": "The Dataset Distribution Host Schema",
-                      "description": "To provide information on quality of service provided by infrastructure (e.g. repository) where data is stored.",
-                      "properties": {
-                        "availability": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/availability",
-                          "type": "string",
-                          "title": "The Dataset Distribution Host Availability Schema",
-                          "description": "Availability",
-                          "examples": ["99,5"]
-                        },
-                        "backup_frequency": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/backup_frequency",
-                          "type": "string",
-                          "title": "The Dataset Distribution Host Backup Frequency Schema",
-                          "description": "Backup Frequency",
-                          "examples": ["weekly"]
-                        },
-                        "backup_type": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/backup_type",
-                          "type": "string",
-                          "title": "The Dataset Distribution Host Backup Type Schema",
-                          "description": "Backup Type",
-                          "examples": ["tapes"]
-                        },
-                        "certified_with": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/certified_with",
-                          "type": "string",
-                          "enum": [
-                            "din31644",
-                            "dini-zertifikat",
-                            "dsa",
-                            "iso16363",
-                            "iso16919",
-                            "trac",
-                            "wds",
-                            "coretrustseal"
-                          ],
-                          "title": "The Dataset Distribution Host Certification Type Schema",
-                          "description": "Repository certified to a recognised standard. Allowed values: din31644, dini-zertifikat, dsa, iso16363, iso16919, trac, wds, coretrustseal",
-                          "examples": ["coretrustseal"]
-                        },
-                        "description": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/description",
-                          "type": "string",
-                          "title": "The Dataset Distribution Host Description Schema",
-                          "description": "Description",
-                          "examples": ["Repository hosted by..."]
-                        },
-                        "geo_location": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/geo_location",
-                          "type": "string",
-                          "enum": [
-                            "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA",
-                            "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV",
-                            "BW", "BY", "BZ", "CA", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CU",
-                            "CV", "CW", "CX", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES",
-                            "ET", "FI", "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM",
-                            "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY", "HK", "HM", "HN", "HR", "HT", "HU", "ID", "IE",
-                            "IL", "IM", "IN", "IO", "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM",
-                            "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY",
-                            "MA", "MC", "MD", "ME", "MF", "MG", "MH", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT",
-                            "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "NP", "NR", "NU",
-                            "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY", "QA",
-                            "RE", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM",
-                            "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC", "TD", "TF", "TG", "TH", "TJ", "TK", "TL",
-                            "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "UM", "US", "UY", "UZ", "VA", "VC", "VE",
-                            "VG", "VI", "VN", "VU", "WF", "WS", "YE", "YT", "ZA", "ZM", "ZW"
-                          ],
-                          "title": "The Dataset Distribution Host Geographical Location Schema",
-                          "description": "Physical location of the data expressed using ISO 3166-1 country code.",
-                          "examples": ["AT"]
-                        },
-                        "pid_system": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/pid_system",
-                          "type": "array",
-                          "title": "The Dataset Distribution Host PID System Schema",
-                          "description": "PID system(s). Allowed values: ark, arxiv, bibcode, doi, ean13, eissn, handle, igsn, isbn, issn, istc, lissn, lsid, pmid, purl, upc, url, urn, other",
-                          "items": {
-                            "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/pid_system/items",
-                            "type": "string",
-                            "title": "The Dataset Distribution Host PID System Items Schema",
-                            "enum": [
-                              "ark",
-                              "arxiv",
-                              "bibcode",
-                              "doi",
-                              "ean13",
-                              "eissn",
-                              "handle",
-                              "igsn",
-                              "isbn",
-                              "issn",
-                              "istc",
-                              "lissn",
-                              "lsid",
-                              "pmid",
-                              "purl",
-                              "upc",
-                              "url",
-                              "urn",
-                              "other"
-                            ],
-                            "examples": ["doi"]
-                          }
-                        },
-                        "storage_type": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/storage_type",
-                          "type": "string",
-                          "title": "The Dataset Distribution Host Storage Type Schema",
-                          "description": "The type of storage required",
-                          "examples": ["External Hard Drive"]
-                        },
-                        "support_versioning": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/support_versioning",
-                          "type": "string",
-                          "enum": [
-                            "yes",
-                            "no",
-                            "unknown"
-                          ],
-                          "title": "The Dataset Distribution Host Support Versioning Schema",
-                          "description": "If host supports versioning. Allowed values: yes, no, unknown",
-                          "examples": ["yes"]
-                        },
-                        "title": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/title",
-                          "type": "string",
-                          "title": "The Dataset Distribution Host Title Schema",
-                          "description": "Title",
-                          "examples": ["Super Repository"]
-                        },
-                        "url": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/host/properties/url",
-                          "type": "string",
-                          "format": "uri",
-                          "title": "The Dataset Distribution Host Title Schema",
-                          "description": "The URL of the system hosting a distribution of a dataset",
-                          "examples": ["https://zenodo.org"]
-                        }
-                      },
-                      "required": [
-                        "title",
-                        "url"
-                      ]
-                    },
-                    "license": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/license",
-                      "type": "array",
-                      "title": "The Dataset Distribution License(s) Schema",
-                      "description": "To list all licenses applied to a specific distribution of data.",
-                      "items": {
-                        "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/license/items",
-                        "type": "object",
-                        "title": "The Dataset Distribution License Items",
-                        "properties": {
-                          "license_ref": {
-                            "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/license/items/properties/license_ref",
-                            "type": "string",
-                            "format": "uri",
-                            "title": "The Dataset Distribution License Reference Schema",
-                            "description": "Link to license document.",
-                            "examples": ["https://creativecommons.org/licenses/by/4.0/"]
-                          },
-                          "start_date": {
-                            "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/license/items/properties/start_date",
-                            "type": "string",
-                            "format": "date",
-                            "title": "The Dataset Distribution License Start Date Schema",
-                            "description": "If date is set in the future, it indicates embargo period. Encoded using the relevant ISO 8601 Date and Time compliant string.",
-                            "examples": ["2019-06-30"]
-                          }
-                        },
-                        "required": [
-                          "license_ref",
-                          "start_date"
-                        ]
-                      }
-                    },
-                    "title": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/distribution/items/properties/title",
-                      "type": "string",
-                      "title": "The Dataset Distribution Title Schema",
-                      "description": "Title is a property in both Dataset and Distribution, in compliance with W3C DCAT. In some cases these might be identical, but in most cases the Dataset represents a more abstract concept, while the distribution can point to a specific file.",
-                      "examples": ["Full resolution images"]
-                    }
-                  },
-                  "required": [
-                    "data_access",
-                    "title"
-                  ]
-                }
-              },
-              "issued": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/issued",
-                "type": "string",
-                "format": "date",
-                "title": "The Dataset Date of Issue Schema",
-                "description": "Issued. Encoded using the relevant ISO 8601 Date and Time compliant string.",
-                "examples": ["2019-06-30"]
-              },
-              "keyword": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/keyword",
-                "type": "array",
-                "title": "The Dataset Keyword(s) Schema",
-                "description": "Keywords",
-                "items": {
-                  "$id": "#/properties/dmp/properties/dataset/items/properties/keyword/items",
-                  "type": "string",
-                  "title": "The Dataset Keyword Items Schema",
-                  "examples": ["keyword 1, keyword 2"]
-                }
-              },
-              "language": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/language",
-                "type": "string",
-                "enum": [
-                  "aar", "abk", "afr", "aka", "amh", "ara", "arg", "asm", "ava", "ave", "aym", "aze", "bak", "bam", "bel", "ben", "bih", "bis", "bod", "bos",
-                  "bre", "bul", "cat", "ces", "cha", "che", "chu", "chv", "cor", "cos", "cre", "cym", "dan", "deu", "div", "dzo", "ell", "eng", "epo", "est",
-                  "eus", "ewe", "fao", "fas", "fij", "fin", "fra", "fry", "ful", "gla", "gle", "glg", "glv", "grn", "guj", "hat", "hau", "hbs", "heb", "her",
-                  "hin", "hmo", "hrv", "hun", "hye", "ibo", "ido", "iii", "iku", "ile", "ina", "ind", "ipk", "isl", "ita", "jav", "jpn", "kal", "kan", "kas",
-                  "kat", "kau", "kaz", "khm", "kik", "kin", "kir", "kom", "kon", "kor", "kua", "kur", "lao", "lat", "lav", "lim", "lin", "lit", "ltz", "lub",
-                  "lug", "mah", "mal", "mar", "mkd", "mlg", "mlt", "mon", "mri", "msa", "mya", "nau", "nav", "nbl", "nde", "ndo", "nep", "nld", "nno", "nob",
-                  "nor", "nya", "oci", "oji", "ori", "orm", "oss", "pan", "pli", "pol", "por", "pus", "que", "roh", "ron", "run", "rus", "sag", "san", "sin",
-                  "slk", "slv", "sme", "smo", "sna", "snd", "som", "sot", "spa", "sqi", "srd", "srp", "ssw", "sun", "swa", "swe", "tah", "tam", "tat", "tel",
-                  "tgk", "tgl", "tha", "tir", "ton", "tsn", "tso", "tuk", "tur", "twi", "uig", "ukr", "urd", "uzb", "ven", "vie", "vol", "wln", "wol", "xho",
-                  "yid", "yor", "zha", "zho", "zul"
-                ],
-                "title": "The Dataset Language Schema",
-                "description": "Language of the dataset expressed using ISO 639-3.",
-                "examples": ["eng"]
-              },
-              "metadata": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/metadata",
-                "type": "array",
-                "title": "The Dataset Metadata Schema",
-                "description": "To describe metadata standards used.",
-                "items": {
-                  "$id": "#/properties/dmp/properties/dataset/items/properties/metadata/items",
-                  "type": "object",
-                  "title": "The Dataset Metadata Items Schema",
-                  "properties": {
-                    "description": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/metadata/items/properties/description",
-                      "type": "string",
-                      "title": "The Dataset Metadata Description Schema",
-                      "description": "Description",
-                      "examples": ["Provides taxonomy for..."]
-                    },
-                    "language": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/metadata/items/properties/language",
-                      "type": "string",
-                      "enum": [
-                        "aar", "abk", "afr", "aka", "amh", "ara", "arg", "asm", "ava", "ave", "aym", "aze", "bak", "bam", "bel", "ben", "bih", "bis", "bod", "bos",
-                        "bre", "bul", "cat", "ces", "cha", "che", "chu", "chv", "cor", "cos", "cre", "cym", "dan", "deu", "div", "dzo", "ell", "eng", "epo", "est",
-                        "eus", "ewe", "fao", "fas", "fij", "fin", "fra", "fry", "ful", "gla", "gle", "glg", "glv", "grn", "guj", "hat", "hau", "hbs", "heb", "her",
-                        "hin", "hmo", "hrv", "hun", "hye", "ibo", "ido", "iii", "iku", "ile", "ina", "ind", "ipk", "isl", "ita", "jav", "jpn", "kal", "kan", "kas",
-                        "kat", "kau", "kaz", "khm", "kik", "kin", "kir", "kom", "kon", "kor", "kua", "kur", "lao", "lat", "lav", "lim", "lin", "lit", "ltz", "lub",
-                        "lug", "mah", "mal", "mar", "mkd", "mlg", "mlt", "mon", "mri", "msa", "mya", "nau", "nav", "nbl", "nde", "ndo", "nep", "nld", "nno", "nob",
-                        "nor", "nya", "oci", "oji", "ori", "orm", "oss", "pan", "pli", "pol", "por", "pus", "que", "roh", "ron", "run", "rus", "sag", "san", "sin",
-                        "slk", "slv", "sme", "smo", "sna", "snd", "som", "sot", "spa", "sqi", "srd", "srp", "ssw", "sun", "swa", "swe", "tah", "tam", "tat", "tel",
-                        "tgk", "tgl", "tha", "tir", "ton", "tsn", "tso", "tuk", "tur", "twi", "uig", "ukr", "urd", "uzb", "ven", "vie", "vol", "wln", "wol", "xho",
-                        "yid", "yor", "zha", "zho", "zul"
-                      ],
-                      "title": "The Dataset Metadata Language Schema",
-                      "description": "Language of the metadata expressed using ISO 639-3.",
-                      "examples": ["eng"]
-                    },
-                    "metadata_standard_id" : {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/metadata/items/properties/metadata_standard_id",
-                      "type": "object",
-                      "title": "The Dataset Metadata Standard ID Schema",
-                      "properties": {
-                        "identifier": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/metadata/items/properties/metadata_standard_id/identifier",
-                          "type": "string",
-                          "title": "The Dataset Metadata Standard Identifier Value Schema",
-                          "description": "Identifier for the metadata standard used.",
-                          "examples": ["http://www.dublincore.org/specifications/dublin-core/dcmi-terms/"]
-                        },
-                        "type": {
-                          "$id": "#/properties/dmp/properties/dataset/items/properties/metadata/items/properties/metadata_standard_id/type",
-                          "type": "string",
-                          "enum": [
-                            "url",
-                            "other"
-                          ],
-                          "title": "The Dataset Metadata Standard Identifier Type Schema",
-                          "description": "Identifier type. Allowed values: url, other",
-                          "examples": ["url"]
-                        }
-                      },
-                      "required": [
-                        "identifier",
-                        "type"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "language",
-                    "metadata_standard_id"
-                  ]
-                }
-              },
-              "personal_data": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/personal_data",
-                "type": "string",
-                "enum": [
-                  "yes",
-                  "no",
-                  "unknown"
-                ],
-                "title": "The Dataset Personal Data Schema",
-                "description": "If any personal data is contained. Allowed values: yes, no, unknown",
-                "examples": ["unknown"]
-              },
-              "preservation_statement": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/preservation_statement",
-                "type": "string",
-                "title": "The Dataset Preservation Statement Schema",
-                "description": "Preservation Statement",
-                "examples": ["Must be preserved to enable..."]
-              },
-              "security_and_privacy": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/security_and_privacy",
-                "type": "array",
-                "title": "The Dataset Security and Policy Schema",
-                "description": "To list all issues and requirements related to security and privacy",
-                "items": {
-                  "$id": "#/properties/dmp/properties/dataset/items/properties/security_and_privacy/items",
-                  "type": "object",
-                  "title": "The Dataset Security & Policy Items Schema",
-                  "properties": {
-                    "description": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/security_and_privacy/items/properties/description",
-                      "type": "string",
-                      "title": "The Dataset Security & Policy Description Schema",
-                      "description": "Description",
-                      "examples": ["Server with data must be kept in a locked room"]
-                    },
-                    "title": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/security_and_privacy/items/properties/title",
-                      "type": "string",
-                      "title": "The Dataset Security & Policy Title Schema",
-                      "description": "Title",
-                      "examples": ["Physical access control"]
-                    }
-                  },
-                  "required": ["title"]
-                }
-              },
-              "sensitive_data": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/sensitive_data",
-                "type": "string",
-                "enum": [
-                  "yes",
-                  "no",
-                  "unknown"
-                ],
-                "title": "The Dataset Sensitive Data Schema",
-                "description": "If any sensitive data is contained. Allowed values: yes, no, unknown",
-                "examples": ["unknown"]
-              },
-              "technical_resource": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/technical_resource",
-                "type": "array",
-                "title": "The Dataset Technical Resource Schema",
-                "description": "To list all technical resources needed to implement a DMP",
-                "items": {
-                  "$id": "#/properties/dmp/properties/dataset/items/properties/technical_resource/items",
-                  "type": "object",
-                  "title": "The Dataset Technical Resource Items Schema",
-                  "properties": {
-                    "description": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/technical_resource/items/description",
-                      "type": "string",
-                      "title": "The Dataset Technical Resource Description Schema",
-                      "description": "Description of the technical resource",
-                      "examples": ["Device needed to collect field data..."]
-                    },
-                    "name": {
-                      "$id": "#/properties/dmp/properties/dataset/items/properties/technical_resource/items/name",
-                      "type": "string",
-                      "title": "The Dataset Technical Resource Name Schema",
-                      "description": "Name of the technical resource",
-                      "examples": ["123/45/43/AT"]
-                    }
-                  },
-                  "required": ["name"]
-                }
-              },
-              "title": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/title",
-                "type": "string",
-                "title": "The Dataset Title Schema",
-                "description": "Title is a property in both Dataset and Distribution, in compliance with W3C DCAT. In some cases these might be identical, but in most cases the Dataset represents a more abstract concept, while the distribution can point to a specific file.",
-                "examples": ["Fast car images"]
-              },
-              "type": {
-                "$id": "#/properties/dmp/properties/dataset/items/properties/type",
-                "type": "string",
-                "title": "The Dataset Type Schema",
-                "description": "If appropriate, type according to: DataCite and/or COAR dictionary. Otherwise use the common name for the type, e.g. raw data, software, survey, etc. https://schema.datacite.org/meta/kernel-4.1/doc/DataCite-MetadataKernel_v4.1.pdf http://vocabularies.coar-repositories.org/pubby/resource_type.html",
-                "examples": ["image"]
-              }
-            },
-            "required": [
-              "dataset_id",
-              "personal_data",
-              "sensitive_data",
-              "title"
-            ]
+            "$ref": "#/$defs/Affiliation"
           }
+        },
+        "contact_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ContactID"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ContactID"
+              },
+              "minItems": 1
+            }
+          ]
+        },
+        "mbox": {
+          "type": "string",
+          "format": "email",
+          "title": "Mailbox",
+          "description": "Contact Person's E-mail address",
+          "examples": [
+            "cc@example.com"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Name of the contact person",
+          "examples": [
+            "Charlie Chaplin"
+          ]
+        }
+      },
+      "required": [
+        "contact_id",
+        "mbox",
+        "name"
+      ]
+    },
+    "ContactID": {
+      "type": "object",
+      "title": "Contact ID",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "0000-0003-0644-4174"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Identifier type. Suggested values: orcid, isni, openid",
+          "examples": [
+            "orcid"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "Contributor": {
+      "type": "object",
+      "title": "Contributor",
+      "properties": {
+        "affiliation": {
+          "type": "array",
+          "title": "Affiliations",
+          "description": "Affiliation(s) of the contributor",
+          "items": {
+            "$ref": "#/$defs/Affiliation"
+          }
+        },
+        "contributor_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ContributorID"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ContributorID"
+              },
+              "minItems": 0
+            }
+          ]
+        },
+        "mbox": {
+          "type": "string",
+          "title": "Mailbox",
+          "description": "E-mail address for a contributor",
+          "examples": [
+            "john@smith.com"
+          ],
+          "format": "email"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Name of the contributor",
+          "examples": [
+            "John Smith"
+          ]
+        },
+        "role": {
+          "$ref": "#/$defs/ContributorRoles"
+        }
+      },
+      "required": [
+        "contributor_id",
+        "name",
+        "role"
+      ]
+    },
+    "ContributorID": {
+      "type": "object",
+      "title": "Contributor ID",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "0000-0003-0644-4174"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Identifier type. Suggested values: orcid, isni, openid",
+          "examples": [
+            "orcid"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "ContributorRole": {
+      "type": "string",
+      "title": "Contributor Role",
+      "description": "Contributors role(s) within the process of data management (incl. planning). It is recommended to use contributor types of DataCite Metadata Schema (https://datacite-metadata-schema.readthedocs.io/en/4.5/appendices/appendix-1/contributorType/).",
+      "examples": [
+        "DataManager",
+        "Researcher"
+      ]
+    },
+    "ContributorRoles": {
+      "type": "array",
+      "title": "Contributor Roles",
+      "description": "Type of contributor",
+      "items": {
+        "$ref": "#/$defs/ContributorRole"
+      },
+      "uniqueItems": true
+    },
+    "Contributors": {
+      "type": "array",
+      "title": "The Contributor Schema",
+      "items": {
+        "$ref": "#/$defs/Contributor"
+      }
+    },
+    "Cost": {
+      "type": "object",
+      "title": "Cost",
+      "properties": {
+        "currency_code": {
+          "$ref": "#/$defs/CurrencyCode"
         },
         "description": {
-          "$id": "#/properties/dmp/properties/description",
           "type": "string",
-          "title": "The DMP Description Schema",
-          "description": "To provide any free-form text information on a DMP",
-          "examples": ["This DMP is for our new project"]
-        },
-        "dmp_id": {
-          "$id": "#/properties/dmp/properties/dmp_id",
-          "type": "object",
-          "title": "The DMP Identifier Schema",
-          "description": "Identifier for the DMP itself",
-          "properties": {
-            "identifier": {
-              "$id": "#/properties/dmp/properties/dmp_id/properties/identifier",
-              "type": "string",
-              "title": "The DMP Identifier Value Schema",
-              "description": "Identifier for a DMP",
-              "examples": ["https://doi.org/10.1371/journal.pcbi.1006750"]
-            },
-            "type": {
-              "$id": "#/properties/dmp/properties/dmp_id/properties/type",
-              "type": "string",
-              "enum": [
-                "handle",
-                "doi",
-                "ark",
-                "url",
-                "other"
-              ],
-              "title": "The DMP Identifier Type Schema",
-              "description": "The DMP Identifier Type. Allowed values: handle, doi, ark, url, other",
-              "examples": ["doi"]
-            }
-          },
-          "required": [
-            "identifier",
-            "type"
+          "title": "Description",
+          "description": "To provide additional details about a cost, including specifying which activities or resources it relates to, such as making data FAIR, ensuring data accessibility, or enhancing its reusability.",
+          "examples": [
+            "Storage and backup costs are calculated based on a 12-month storage period, daily incremental and weekly full backups, and a frequency of 4 restores per month, as outlined in the evaluation table at www.example-storagecostevaluation.com."
           ]
         },
-        "ethical_issues_description": {
-          "$id": "#/properties/dmp/properties/ethical_issues_description",
+        "title": {
           "type": "string",
-          "title": "The DMP Ethical Issues Description Schema",
-          "description": "To describe ethical issues directly in a DMP",
-          "examples": ["There are ethical issues, because..."]
+          "title": "Title",
+          "description": "Title of a cost",
+          "examples": [
+            "Storage and Backup"
+          ]
         },
-        "ethical_issues_exist": {
-          "$id": "#/properties/dmp/properties/ethical_issues_exist",
+        "value": {
+          "type": "number",
+          "title": "Value",
+          "description": "Cost value in the specified currency",
+          "examples": [
+            1000
+          ]
+        }
+      },
+      "required": [
+        "title"
+      ]
+    },
+    "Costs": {
+      "type": "array",
+      "title": "Costs",
+      "items": {
+        "$ref": "#/$defs/Cost"
+      }
+    },
+    "Creator": {
+      "type": "object",
+      "title": "Creator",
+      "properties": {
+        "affiliation": {
+          "type": "array",
+          "title": "Affiliations",
+          "description": "Affiliation(s) of the creator",
+          "items": {
+            "$ref": "#/$defs/Affiliation"
+          }
+        },
+        "creator_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/CreatorID"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/CreatorID"
+              },
+              "minItems": 0
+            }
+          ]
+        },
+        "mbox": {
+          "type": "string",
+          "title": "Mailbox",
+          "description": "Creator Mail address",
+          "examples": [
+            "john.doe@example.com"
+          ],
+          "format": "email"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Name of the creator",
+          "examples": [
+            "John Doe"
+          ]
+        }
+      },
+      "required": [
+        "creator_id",
+        "name"
+      ]
+    },
+    "CreatorID": {
+      "type": "object",
+      "title": "Creator ID",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "0000-0003-0644-4174"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Identifier type. Suggested values: orcid, isni, openid",
+          "examples": [
+            "orcid"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "CurrencyCode": {
+      "type": "string",
+      "enum": [
+        "AED",
+        "AFN",
+        "ALL",
+        "AMD",
+        "ANG",
+        "AOA",
+        "ARS",
+        "AUD",
+        "AWG",
+        "AZN",
+        "BAM",
+        "BBD",
+        "BDT",
+        "BGN",
+        "BHD",
+        "BIF",
+        "BMD",
+        "BND",
+        "BOB",
+        "BRL",
+        "BSD",
+        "BTN",
+        "BWP",
+        "BYN",
+        "BZD",
+        "CAD",
+        "CDF",
+        "CHF",
+        "CLP",
+        "CNY",
+        "COP",
+        "CRC",
+        "CUC",
+        "CUP",
+        "CVE",
+        "CZK",
+        "DJF",
+        "DKK",
+        "DOP",
+        "DZD",
+        "EGP",
+        "ERN",
+        "ETB",
+        "EUR",
+        "FJD",
+        "FKP",
+        "GBP",
+        "GEL",
+        "GGP",
+        "GHS",
+        "GIP",
+        "GMD",
+        "GNF",
+        "GTQ",
+        "GYD",
+        "HKD",
+        "HNL",
+        "HRK",
+        "HTG",
+        "HUF",
+        "IDR",
+        "ILS",
+        "IMP",
+        "INR",
+        "IQD",
+        "IRR",
+        "ISK",
+        "JEP",
+        "JMD",
+        "JOD",
+        "JPY",
+        "KES",
+        "KGS",
+        "KHR",
+        "KMF",
+        "KPW",
+        "KRW",
+        "KWD",
+        "KYD",
+        "KZT",
+        "LAK",
+        "LBP",
+        "LKR",
+        "LRD",
+        "LSL",
+        "LYD",
+        "MAD",
+        "MDL",
+        "MGA",
+        "MKD",
+        "MMK",
+        "MNT",
+        "MOP",
+        "MRU",
+        "MUR",
+        "MVR",
+        "MWK",
+        "MXN",
+        "MYR",
+        "MZN",
+        "NAD",
+        "NGN",
+        "NIO",
+        "NOK",
+        "NPR",
+        "NZD",
+        "OMR",
+        "PAB",
+        "PEN",
+        "PGK",
+        "PHP",
+        "PKR",
+        "PLN",
+        "PYG",
+        "QAR",
+        "RON",
+        "RSD",
+        "RUB",
+        "RWF",
+        "SAR",
+        "SBD",
+        "SCR",
+        "SDG",
+        "SEK",
+        "SGD",
+        "SHP",
+        "SLL",
+        "SOS",
+        "SPL*",
+        "SRD",
+        "STN",
+        "SVC",
+        "SYP",
+        "SZL",
+        "THB",
+        "TJS",
+        "TMT",
+        "TND",
+        "TOP",
+        "TRY",
+        "TTD",
+        "TVD",
+        "TWD",
+        "TZS",
+        "UAH",
+        "UGX",
+        "USD",
+        "UYU",
+        "UZS",
+        "VEF",
+        "VND",
+        "VUV",
+        "WST",
+        "XAF",
+        "XCD",
+        "XDR",
+        "XOF",
+        "XPF",
+        "YER",
+        "ZAR",
+        "ZMW",
+        "ZWD"
+      ],
+      "title": "Currency Code",
+      "description": "Allowed values defined by ISO 4217",
+      "examples": [
+        "EUR"
+      ]
+    },
+    "CountryCode": {
+      "type": "string",
+      "enum": [
+        "AD",
+        "AE",
+        "AF",
+        "AG",
+        "AI",
+        "AL",
+        "AM",
+        "AO",
+        "AQ",
+        "AR",
+        "AS",
+        "AT",
+        "AU",
+        "AW",
+        "AX",
+        "AZ",
+        "BA",
+        "BB",
+        "BD",
+        "BE",
+        "BF",
+        "BG",
+        "BH",
+        "BI",
+        "BJ",
+        "BL",
+        "BM",
+        "BN",
+        "BO",
+        "BQ",
+        "BR",
+        "BS",
+        "BT",
+        "BV",
+        "BW",
+        "BY",
+        "BZ",
+        "CA",
+        "CC",
+        "CD",
+        "CF",
+        "CG",
+        "CH",
+        "CI",
+        "CK",
+        "CL",
+        "CM",
+        "CN",
+        "CO",
+        "CR",
+        "CU",
+        "CV",
+        "CW",
+        "CX",
+        "CY",
+        "CZ",
+        "DE",
+        "DJ",
+        "DK",
+        "DM",
+        "DO",
+        "DZ",
+        "EC",
+        "EE",
+        "EG",
+        "EH",
+        "ER",
+        "ES",
+        "ET",
+        "FI",
+        "FJ",
+        "FK",
+        "FM",
+        "FO",
+        "FR",
+        "GA",
+        "GB",
+        "GD",
+        "GE",
+        "GF",
+        "GG",
+        "GH",
+        "GI",
+        "GL",
+        "GM",
+        "GN",
+        "GP",
+        "GQ",
+        "GR",
+        "GS",
+        "GT",
+        "GU",
+        "GW",
+        "GY",
+        "HK",
+        "HM",
+        "HN",
+        "HR",
+        "HT",
+        "HU",
+        "ID",
+        "IE",
+        "IL",
+        "IM",
+        "IN",
+        "IO",
+        "IQ",
+        "IR",
+        "IS",
+        "IT",
+        "JE",
+        "JM",
+        "JO",
+        "JP",
+        "KE",
+        "KG",
+        "KH",
+        "KI",
+        "KM",
+        "KN",
+        "KP",
+        "KR",
+        "KW",
+        "KY",
+        "KZ",
+        "LA",
+        "LB",
+        "LC",
+        "LI",
+        "LK",
+        "LR",
+        "LS",
+        "LT",
+        "LU",
+        "LV",
+        "LY",
+        "MA",
+        "MC",
+        "MD",
+        "ME",
+        "MF",
+        "MG",
+        "MH",
+        "MK",
+        "ML",
+        "MM",
+        "MN",
+        "MO",
+        "MP",
+        "MQ",
+        "MR",
+        "MS",
+        "MT",
+        "MU",
+        "MV",
+        "MW",
+        "MX",
+        "MY",
+        "MZ",
+        "NA",
+        "NC",
+        "NE",
+        "NF",
+        "NG",
+        "NI",
+        "NL",
+        "NO",
+        "NP",
+        "NR",
+        "NU",
+        "NZ",
+        "OM",
+        "PA",
+        "PE",
+        "PF",
+        "PG",
+        "PH",
+        "PK",
+        "PL",
+        "PM",
+        "PN",
+        "PR",
+        "PS",
+        "PT",
+        "PW",
+        "PY",
+        "QA",
+        "RE",
+        "RO",
+        "RS",
+        "RU",
+        "RW",
+        "SA",
+        "SB",
+        "SC",
+        "SD",
+        "SE",
+        "SG",
+        "SH",
+        "SI",
+        "SJ",
+        "SK",
+        "SL",
+        "SM",
+        "SN",
+        "SO",
+        "SR",
+        "SS",
+        "ST",
+        "SV",
+        "SX",
+        "SY",
+        "SZ",
+        "TC",
+        "TD",
+        "TF",
+        "TG",
+        "TH",
+        "TJ",
+        "TK",
+        "TL",
+        "TM",
+        "TN",
+        "TO",
+        "TR",
+        "TT",
+        "TV",
+        "TW",
+        "TZ",
+        "UA",
+        "UG",
+        "UM",
+        "US",
+        "UY",
+        "UZ",
+        "VA",
+        "VC",
+        "VE",
+        "VG",
+        "VI",
+        "VN",
+        "VU",
+        "WF",
+        "WS",
+        "YE",
+        "YT",
+        "ZA",
+        "ZM",
+        "ZW"
+      ],
+      "title": "Country Code",
+      "description": "Physical location of the data expressed using ISO 3166-1 country code.",
+      "examples": [
+        "AT"
+      ]
+    },
+    "DataAccess": {
+      "type": "string",
+      "enum": [
+        "open",
+        "shared",
+        "closed"
+      ],
+      "title": "Data Access",
+      "description": "Indicates access mode for data. Allowed values: open, shared, closed",
+      "examples": [
+        "open"
+      ]
+    },
+    "Dataset": {
+      "type": "object",
+      "title": "Dataset",
+      "properties": {
+        "alternate_identifier": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AlternateIdentifier"
+          },
+          "minItems": 0
+        },
+        "creator": {
+          "type": "array",
+          "title": "Creators",
+          "items": {
+            "$ref": "#/$defs/Creator"
+          }
+        },
+        "data_quality_assurance": {
+          "type": "array",
+          "title": "Data Quality Assurance",
+          "description": "To describe any quality assurance processes applied to a dataset, such as, to ensure its accuracy, reliability, consistency, and usability for its intended purposes. This includes systematic practices, procedures, and policies designed to maintain high data quality throughout its lifecycle.",
+          "items": {
+            "type": "string",
+            "examples": [
+              "We calibrate measuring equipment daily, run repeat samples to monitor consistency in measurements and results, and cross-check collected data with at least two colleagues for accuracy."
+            ]
+          }
+        },
+        "dataset_id": {
+          "$ref": "#/$defs/DatasetID"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "Description is a property in both Dataset and Distribution, in compliance with W3C DCAT. In some cases these might be identical, but in most cases the Dataset represents a more abstract concept, while the distribution can point to a specific file.",
+          "examples": [
+            "The dataset includes detailed measurements of temperature, humidity, and soil moisture levels collected at various time intervals (every 30 minutes) across multiple locations. The dataset will also include metadata such as GPS coordinates, sensor calibration data, and environmental conditions. The primary objective of this dataset is to analyze the correlation between these variables and their impact on plant growth patterns over a 6-month period."
+          ]
+        },
+        "distribution": {
+          "type": "array",
+          "title": "Distributions",
+          "description": "To provide technical information on a specific instance of data.",
+          "items": {
+            "$ref": "#/$defs/Distribution"
+          }
+        },
+        "is_reused": {
+          "type": "boolean",
+          "title": "The Dataset Is Reused Schema",
+          "description": "Indicates if the dataset is reused, i.e., not produced in project(s) covered by this DMP.",
+          "examples": [
+            true
+          ]
+        },
+        "issued": {
+          "type": "string",
+          "format": "date",
+          "title": "Issued",
+          "description": "To indicate a date when a dataset was published or released. Encoded using the relevant ISO 8601 Date compliant string.",
+          "examples": [
+            "2019-06-30"
+          ]
+        },
+        "keyword": {
+          "type": "array",
+          "title": "Keywords",
+          "items": {
+            "type": "string",
+            "title": "Keyword",
+            "examples": [
+              "keyword 1",
+              "keyword 2"
+            ]
+          }
+        },
+        "language": {
+          "$ref": "#/$defs/LanguageCode"
+        },
+        "metadata": {
+          "type": "array",
+          "title": "Metadata",
+          "description": "To describe metadata standards used.",
+          "items": {
+            "$ref": "#/$defs/Metadata"
+          }
+        },
+        "personal_data": {
           "type": "string",
           "enum": [
             "yes",
             "no",
             "unknown"
           ],
-          "title": "The DMP Ethical Issues Exist Schema",
-          "description": "To indicate whether there are ethical issues related to data that this DMP describes. Allowed values: yes, no, unknown",
-          "examples": ["yes"]
+          "title": "Personal Data",
+          "description": "To indicate whether a dataset contains personal data. Personal data refers to any data that can identify an individual (e.g. name, birthdate, address, voice recordings, etc.). Allowed values: yes, no, unknown",
+          "examples": [
+            "unknown"
+          ]
         },
-        "ethical_issues_report": {
-          "$id": "#/properties/dmp/properties/ethical_issues_report",
+        "preservation_statement": {
           "type": "string",
-          "format": "uri",
-          "title": "The DMP Ethical Issues Report Schema",
-          "description": "To indicate where a protocol from a meeting with an ethical commitee can be found",
-          "examples": ["http://report.location"]
+          "title": "Preservation Statement",
+          "description": "To outline a plan for how and why a dataset will be preserved for long-term access, including for example storage redundancy, integrity checks (checksums, fixity checks), format migration,  and a sustainability plan ensuring institutional commitment and funding.",
+          "examples": [
+            "All research data will be stored in the university's secure data repository, backed up daily to ensure redundancy and prevent data loss. The dataset will be preserved in a standardized format (e.g. CSV, JSON) and will include detailed metadata for clarity. It will be accessible to the public via the university’s open-access platform three months after the completion of the project, with ongoing access ensured for a minimum of 5 years. Regular checks will be performed every 6 months to confirm the integrity and readability of the data."
+          ]
         },
-        "language": {
-          "$id": "#/properties/dmp/properties/language",
+        "rights": {
+          "type": "string",
+          "title": "Rights",
+          "description": "A statement that concerns all rights not addressed with license, such as copyright statements.",
+          "examples": [
+            "This dataset incorporates third-party materials that are subject to additional rights and restrictions. Users must obtain permission from the original rights holders before reuse."
+          ]
+        },
+        "related_identifier": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RelatedIdentifier"
+          },
+          "minItems": 0
+        },
+        "security_and_privacy": {
+          "$ref": "#/$defs/SecurityAndPrivacyItems"
+        },
+        "sensitive_data": {
           "type": "string",
           "enum": [
-            "aar", "abk", "afr", "aka", "amh", "ara", "arg", "asm", "ava", "ave", "aym", "aze", "bak", "bam", "bel", "ben", "bih", "bis", "bod", "bos",
-            "bre", "bul", "cat", "ces", "cha", "che", "chu", "chv", "cor", "cos", "cre", "cym", "dan", "deu", "div", "dzo", "ell", "eng", "epo", "est",
-            "eus", "ewe", "fao", "fas", "fij", "fin", "fra", "fry", "ful", "gla", "gle", "glg", "glv", "grn", "guj", "hat", "hau", "hbs", "heb", "her",
-            "hin", "hmo", "hrv", "hun", "hye", "ibo", "ido", "iii", "iku", "ile", "ina", "ind", "ipk", "isl", "ita", "jav", "jpn", "kal", "kan", "kas",
-            "kat", "kau", "kaz", "khm", "kik", "kin", "kir", "kom", "kon", "kor", "kua", "kur", "lao", "lat", "lav", "lim", "lin", "lit", "ltz", "lub",
-            "lug", "mah", "mal", "mar", "mkd", "mlg", "mlt", "mon", "mri", "msa", "mya", "nau", "nav", "nbl", "nde", "ndo", "nep", "nld", "nno", "nob",
-            "nor", "nya", "oci", "oji", "ori", "orm", "oss", "pan", "pli", "pol", "por", "pus", "que", "roh", "ron", "run", "rus", "sag", "san", "sin",
-            "slk", "slv", "sme", "smo", "sna", "snd", "som", "sot", "spa", "sqi", "srd", "srp", "ssw", "sun", "swa", "swe", "tah", "tam", "tat", "tel",
-            "tgk", "tgl", "tha", "tir", "ton", "tsn", "tso", "tuk", "tur", "twi", "uig", "ukr", "urd", "uzb", "ven", "vie", "vol", "wln", "wol", "xho",
-            "yid", "yor", "zha", "zho", "zul"
+            "yes",
+            "no",
+            "unknown"
           ],
-          "title": "The DMP Language Schema",
-          "description": "Language of the DMP expressed using ISO 639-3.",
-          "examples": ["eng"]
+          "title": "Sensitive Data",
+          "description": "To indicate whether a dataset contains sensitive data. Sensitive data refers to information that could pose risks to individuals or organizations for example  financial information, medical records, passwords and social security numbers. Allowed values: yes, no, unknown",
+          "examples": [
+            "unknown"
+          ]
         },
-        "modified": {
-          "$id": "#/properties/dmp/properties/modified",
-          "type": "string",
-          "format": "date-time",
-          "title": "The DMP Modification Schema",
-          "description": "Must be set each time DMP is modified. Indicates DMP version. Encoded using the relevant ISO 8601 Date and Time compliant string.",
-          "examples": ["2020-03-14T10:53:49"]
-        },
-        "project": {
-          "$id": "#/properties/dmp/properties/project",
-          "type": "array",
-          "title": "The DMP Project Schema",
-          "description": "Project related to a DMP",
-          "items": {
-            "$id": "#/properties/dmp/properties/project/items",
-            "type": "object",
-            "title": "The DMP Project Items Schema",
-            "properties": {
-              "description": {
-                "$id": "#/properties/dmp/properties/project/items/properties/description",
-                "type": "string",
-                "title": "The DMP Project Description Schema",
-                "description": "Project description",
-                "examples": ["Project develops novel..."]
-              },
-              "end": {
-                "$id": "#/properties/dmp/properties/project/items/properties/end",
-                "type": "string",
-                "format": "date",
-                "title": "The DMP Project End Date Schema",
-                "description": "Project end date. Encoded using the relevant ISO 8601 Date and Time compliant string.",
-                "examples": ["2020-03-31"]
-              },
-              "funding": {
-                "$id": "#/properties/dmp/properties/project/items/properties/funding",
-                "type": "array",
-                "title": "The DMP Project Funding Schema",
-                "description": "Funding related with a project",
-                "items": {
-                  "$id": "#/properties/dmp/properties/project/items/properties/funding/items",
-                  "type": "object",
-                  "title": "The DMP Project Funding Items Schema",
-                  "properties": {
-                    "funder_id": {
-                      "$id": "#/properties/dmp/properties/project/items/properties/funding/properties/funder_id",
-                      "type": "object",
-                      "title": "The Funder ID Schema",
-                      "description": "Funder ID of the associated project",
-                      "properties": {
-                        "identifier": {
-                          "$id": "#/properties/dmp/properties/project/items/properties/funding/properties/funder_id/properties/identifier",
-                          "type": "string",
-                          "title": "The Funder ID Value Schema",
-                          "description": "Funder ID, recommended to use CrossRef Funder Registry. See: https://www.crossref.org/services/funder-registry/",
-                          "examples": ["501100002428"]
-                        },
-                        "type": {
-                          "$id": "#/properties/dmp/properties/project/items/properties/funding/properties/funder_id/properties/type",
-                          "type": "string",
-                          "enum": [
-                            "fundref",
-                            "url",
-                            "other"
-                          ],
-                          "title": "The Funder ID Type Schema",
-                          "description": "Identifier type. Allowed values: fundref, url, other",
-                          "examples": ["fundref"]
-                        }
-                      },
-                      "required": [
-                        "identifier",
-                        "type"
-                      ]
-                    },
-                    "funding_status": {
-                      "$id": "#/properties/dmp/properties/project/items/properties/funding/properties/funding_status",
-                      "type": "string",
-                      "enum": [
-                        "planned",
-                        "applied",
-                        "granted",
-                        "rejected"
-                      ],
-                      "title": "The Funding Status Schema",
-                      "description": "To express different phases of project lifecycle. Allowed values: planned, applied, granted, rejected",
-                      "examples": ["granted"]
-                    },
-                    "grant_id": {
-                      "$id": "#/properties/dmp/properties/project/items/properties/funding/properties/grant_id",
-                      "type": "object",
-                      "title": "The Funding Grant ID Schema",
-                      "description": "Grant ID of the associated project",
-                      "properties": {
-                        "identifier": {
-                          "$id": "#/properties/dmp/properties/project/items/properties/funding/properties/grant_id/properties/identifier",
-                          "type": "string",
-                          "title": "The Funding Grant ID Value Schema",
-                          "description": "Grant ID",
-                          "examples": ["776242"]
-                        },
-                        "type": {
-                          "$id": "#/properties/dmp/properties/project/items/properties/funding/properties/grant_id/properties/type",
-                          "type": "string",
-                          "title": "The Funding Grant ID Type Schema",
-                          "enum": [
-                            "url",
-                            "other"
-                          ],
-                          "description": "Identifier type. Allowed values: url, other",
-                          "examples": ["other"]
-                        }
-                      },
-                      "required": [
-                        "identifier",
-                        "type"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "funder_id"
-                  ]
-                }
-              },
-              "start": {
-                "$id": "#/properties/dmp/properties/project/items/properties/start",
-                "type": "string",
-                "format": "date",
-                "title": "The DMP Project Start Date Schema",
-                "description": "Project start date. Encoded using the relevant ISO 8601 Date and Time compliant string.",
-                "examples": ["2019-04-01"]
-              },
-              "title": {
-                "$id": "#/properties/dmp/properties/project/items/properties/title",
-                "type": "string",
-                "title": "The DMP Project Title Schema",
-                "description": "Project title",
-                "examples": ["Our New Project"]
-              }
-            },
-            "required": [
-              "title"
-            ]
-          }
+        "technical_resource": {
+          "$ref": "#/$defs/TechnicalResources"
         },
         "title": {
-          "$id": "#/properties/dmp/properties/title",
           "type": "string",
-          "title": "The DMP Title Schema",
+          "title": "Title",
+          "description": "Title is a property in both Dataset and Distribution, in compliance with W3C DCAT. In some cases these might be identical, but in most cases the Dataset represents a more abstract concept, while the distribution can point to a specific file.",
+          "examples": [
+            "Fast car images"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "If appropriate, type according to: DataCite and/or COAR dictionary. Otherwise use the common name for the type, e.g. raw data, software, survey, etc. https://schema.datacite.org/meta/kernel-4.1/doc/DataCite-MetadataKernel_v4.1.pdf http://vocabularies.coar-repositories.org/pubby/resource_type.html",
+          "examples": [
+            "image"
+          ]
+        }
+      },
+      "required": [
+        "dataset_id",
+        "personal_data",
+        "sensitive_data",
+        "title"
+      ]
+    },
+    "DatasetID": {
+      "type": "object",
+      "title": "Dataset ID",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "11353/10.923628"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Dataset identifier type. Suggested values: handle, doi, ark, url",
+          "examples": [
+            "handle"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "Datasets": {
+      "type": "array",
+      "title": "Datasets",
+      "items": {
+        "$ref": "#/$defs/Dataset"
+      }
+    },
+    "DMPData": {
+      "type": "object",
+      "title": "DMP",
+      "description": "Provides high level information about the DMP, e.g. its title, modification date, etc. It is the root of this application profile. The majority of its fields are mandatory.",
+      "properties": {
+        "alternate_identifier": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AlternateIdentifier"
+          },
+          "minItems": 0
+        },
+        "contact": {
+          "$ref": "#/$defs/Contact"
+        },
+        "contributor": {
+          "$ref": "#/$defs/Contributors"
+        },
+        "cost": {
+          "$ref": "#/$defs/Costs"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Created",
+          "description": "Date and time of the first version of a DMP. Must not be changed in subsequent DMPs. Encoded using the relevant ISO 8601 Date and Time (with timezone) compliant string.",
+          "examples": [
+            "2019-03-13T13:13:00Z"
+          ]
+        },
+        "dataset": {
+          "$ref": "#/$defs/Datasets"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "Any text related to this DMP, optionally describing the project. It can include important information that doesn't fit elsewhere.",
+          "examples": [
+            "This DMP is for our new project"
+          ]
+        },
+        "dmp_id": {
+          "$ref": "#/$defs/DMPID"
+        },
+        "ethical_issues_description": {
+          "type": "string",
+          "title": "Ethical Issues Description",
+          "description": "To describe considerations that require compliance with laws and regulations (e.g. GDPR, animal welfare) due to the involvement of humans, animals, or sensitive information. This includes ensuring informed consent from participants, protecting privacy and confidentiality, and adhering to applicable legal and ethical standards throughout the research.",
+          "examples": [
+            "There are ethical issues, because..."
+          ]
+        },
+        "ethical_issues_exist": {
+          "$ref": "#/$defs/Booleanish"
+        },
+        "ethical_issues_report": {
+          "type": "string",
+          "title": "Ethical Issues Report",
+          "description": "To indicate where a report/document that details all identified ethical issues (might be for example emit from a meeting with an ethical committee), preferably in URL format",
+          "examples": [
+            "http://report.location"
+          ]
+        },
+        "language": {
+          "$ref": "#/$defs/LanguageCode"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Modified",
+          "description": "Must be set each time DMP is modified. Indicates a DMP version. Encoded using the relevant ISO 8601 Date and Time (with timezone) compliant string.",
+          "examples": [
+            "2020-03-14T10:53:49Z"
+          ]
+        },
+        "project": {
+          "type": "array",
+          "title": "Projects",
+          "description": "Projects related to a DMP",
+          "items": {
+            "$ref": "#/$defs/Project"
+          }
+        },
+        "related_identifier": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RelatedIdentifier"
+          },
+          "minItems": 0
+        },
+        "title": {
+          "type": "string",
+          "title": "Title",
           "description": "Title of a DMP",
-          "examples": ["DMP for our new project"]
+          "examples": [
+            "DMP for our new project"
+          ]
         }
       },
       "required": [
@@ -1007,8 +1163,906 @@
         "modified",
         "title"
       ]
+    },
+    "DMPID": {
+      "type": "object",
+      "title": "DMP ID",
+      "description": "Identifier for the DMP itself",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "10.1371/journal.pcbi.1006750"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "The DMP Identifier Type. Suggested values: handle, doi, ark, url",
+          "examples": [
+            "doi"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "Distribution": {
+      "type": "object",
+      "title": "Distribution",
+      "properties": {
+        "access_url": {
+          "type": "string",
+          "title": "Access URL",
+          "description": "A URL of the resource that gives access to a distribution of the dataset. e.g. landing page.",
+          "examples": [
+            "http://some.repo"
+          ]
+        },
+        "available_until": {
+          "type": "string",
+          "format": "date",
+          "title": "Available Until",
+          "description": "Indicates how long this distribution will be/ should be available. Encoded using the relevant ISO 8601 Date compliant string.",
+          "examples": [
+            "2030-06-30"
+          ]
+        },
+        "byte_size": {
+          "type": "integer",
+          "title": "Byte Size",
+          "description": "Size in bytes.",
+          "examples": [
+            690000
+          ]
+        },
+        "data_access": {
+          "$ref": "#/$defs/DataAccess"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "Description is a property in both Dataset and Distribution, in compliance with W3C DCAT. In some cases these might be identical, but in most cases the Dataset represents a more abstract concept, while the distribution can point to a specific file.",
+          "examples": [
+            "Best quality data before resizing"
+          ]
+        },
+        "download_url": {
+          "type": "string",
+          "format": "url",
+          "title": "Download URL",
+          "description": "The URL of the downloadable file in a given format. E.g. CSV file or RDF file.",
+          "examples": [
+            "http://some.repo.../download/..."
+          ]
+        },
+        "format": {
+          "type": "array",
+          "title": "Format",
+          "description": "Format according to: https://www.iana.org/assignments/media-types/media-types.xhtml if appropriate, otherwise use the common name for this format.",
+          "items": {
+            "$ref": "#/$defs/MIMEType"
+          }
+        },
+        "host": {
+          "$ref": "#/$defs/Host"
+        },
+        "issued": {
+          "type": "string",
+          "format": "date",
+          "title": "Issued",
+          "description": "To indicate a date when a distribution was published or released. Encoded using the relevant ISO 8601 Date compliant string.",
+          "examples": [
+            "2019-06-30"
+          ]
+        },
+        "license": {
+          "$ref": "#/$defs/Licenses"
+        },
+        "title": {
+          "type": "string",
+          "title": "Title",
+          "description": "Title is a property in both Dataset and Distribution, in compliance with W3C DCAT. In some cases these might be identical, but in most cases the Dataset represents a more abstract concept, while the distribution can point to a specific file.",
+          "examples": [
+            "Full resolution images"
+          ]
+        }
+      },
+      "required": [
+        "data_access",
+        "title"
+      ]
+    },
+    "FunderID": {
+      "type": "object",
+      "title": "Funder ID",
+      "description": "Funder ID of the associated project",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "description": "Funder ID, recommended to use CrossRef Funder Registry. See: https://www.crossref.org/services/funder-registry/",
+          "examples": [
+            "501100002428"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Identifier type. Suggested values: fundref, url",
+          "examples": [
+            "fundref"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "Funding": {
+      "type": "object",
+      "title": "Funding",
+      "properties": {
+        "funder_id": {
+          "$ref": "#/$defs/FunderID"
+        },
+        "funding_status": {
+          "$ref": "#/$defs/FundingStatus"
+        },
+        "grant_id": {
+          "$ref": "#/$defs/GrantID"
+        }
+      },
+      "required": [
+        "funder_id"
+      ]
+    },
+    "Fundings": {
+      "type": "array",
+      "title": "Fundings",
+      "description": "Funding related with a project",
+      "items": {
+        "$ref": "#/$defs/Funding"
+      }
+    },
+    "FundingStatus": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "applied",
+        "granted",
+        "rejected"
+      ],
+      "title": "Funding Status",
+      "description": "To express different phases of project lifecycle. Allowed values: planned, applied, granted, rejected",
+      "examples": [
+        "granted"
+      ]
+    },
+    "GrantID": {
+      "type": "object",
+      "title": "Grant ID",
+      "description": "Grant ID of the associated project",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "http://example.org/grants/776242"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Identifier type. Suggested values: url",
+          "examples": [
+            "url"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "Host": {
+      "type": "object",
+      "title": "Host",
+      "description": "To provide information on quality of service provided by infrastructure (e.g. repository) where data is stored.",
+      "properties": {
+        "availability": {
+          "type": "string",
+          "title": "Availability",
+          "description": "Availability of a host (preferably as a percentage)",
+          "examples": [
+            "99,5"
+          ]
+        },
+        "backup_frequency": {
+          "type": "string",
+          "title": "Backup Frequency",
+          "description": "Frequency of backups provided by a host",
+          "examples": [
+            "weekly"
+          ]
+        },
+        "backup_type": {
+          "type": "string",
+          "title": "Backup Type",
+          "description": "Location and/or type of the backup provided by a host",
+          "examples": [
+            "tapes"
+          ]
+        },
+        "certified_with": {
+          "$ref": "#/$defs/Certification"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "examples": [
+            "Repository hosted by..."
+          ]
+        },
+        "geo_location": {
+          "$ref": "#/$defs/CountryCode"
+        },
+        "host_id": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HostID"
+          },
+          "minItems": 0
+        },
+        "pid_system": {
+          "$ref": "#/$defs/PIDSystems"
+        },
+        "storage_type": {
+          "type": "string",
+          "title": "Storage Type",
+          "description": "To indicate whether a host supports versioning of data distributions.",
+          "examples": [
+            "External Hard Drive"
+          ]
+        },
+        "support_versioning": {
+          "$ref": "#/$defs/Booleanish"
+        },
+        "title": {
+          "type": "string",
+          "title": "Title",
+          "examples": [
+            "Super Repository"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "url",
+          "title": "URL",
+          "description": "A URL of an infrastructure hosting a distribution of a dataset",
+          "examples": [
+            "https://zenodo.org"
+          ]
+        }
+      },
+      "required": [
+        "title",
+        "url"
+      ]
+    },
+    "HostID": {
+      "type": "object",
+      "title": "Host ID",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "http://example.org/repo"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Identifier type. Suggested values: url",
+          "examples": [
+            "url"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "MIMEType": {
+      "type": "string",
+      "title": "Format MIME Type",
+      "examples": [
+        "image/tiff"
+      ]
+    },
+    "LanguageCode": {
+      "type": "string",
+      "enum": [
+        "aar",
+        "abk",
+        "afr",
+        "aka",
+        "amh",
+        "ara",
+        "arg",
+        "asm",
+        "ava",
+        "ave",
+        "aym",
+        "aze",
+        "bak",
+        "bam",
+        "bel",
+        "ben",
+        "bih",
+        "bis",
+        "bod",
+        "bos",
+        "bre",
+        "bul",
+        "cat",
+        "ces",
+        "cha",
+        "che",
+        "chu",
+        "chv",
+        "cor",
+        "cos",
+        "cre",
+        "cym",
+        "dan",
+        "deu",
+        "div",
+        "dzo",
+        "ell",
+        "eng",
+        "epo",
+        "est",
+        "eus",
+        "ewe",
+        "fao",
+        "fas",
+        "fij",
+        "fin",
+        "fra",
+        "fry",
+        "ful",
+        "gla",
+        "gle",
+        "glg",
+        "glv",
+        "grn",
+        "guj",
+        "hat",
+        "hau",
+        "hbs",
+        "heb",
+        "her",
+        "hin",
+        "hmo",
+        "hrv",
+        "hun",
+        "hye",
+        "ibo",
+        "ido",
+        "iii",
+        "iku",
+        "ile",
+        "ina",
+        "ind",
+        "ipk",
+        "isl",
+        "ita",
+        "jav",
+        "jpn",
+        "kal",
+        "kan",
+        "kas",
+        "kat",
+        "kau",
+        "kaz",
+        "khm",
+        "kik",
+        "kin",
+        "kir",
+        "kom",
+        "kon",
+        "kor",
+        "kua",
+        "kur",
+        "lao",
+        "lat",
+        "lav",
+        "lim",
+        "lin",
+        "lit",
+        "ltz",
+        "lub",
+        "lug",
+        "mah",
+        "mal",
+        "mar",
+        "mkd",
+        "mlg",
+        "mlt",
+        "mon",
+        "mri",
+        "msa",
+        "mya",
+        "nau",
+        "nav",
+        "nbl",
+        "nde",
+        "ndo",
+        "nep",
+        "nld",
+        "nno",
+        "nob",
+        "nor",
+        "nya",
+        "oci",
+        "oji",
+        "ori",
+        "orm",
+        "oss",
+        "pan",
+        "pli",
+        "pol",
+        "por",
+        "pus",
+        "que",
+        "roh",
+        "ron",
+        "run",
+        "rus",
+        "sag",
+        "san",
+        "sin",
+        "slk",
+        "slv",
+        "sme",
+        "smo",
+        "sna",
+        "snd",
+        "som",
+        "sot",
+        "spa",
+        "sqi",
+        "srd",
+        "srp",
+        "ssw",
+        "sun",
+        "swa",
+        "swe",
+        "tah",
+        "tam",
+        "tat",
+        "tel",
+        "tgk",
+        "tgl",
+        "tha",
+        "tir",
+        "ton",
+        "tsn",
+        "tso",
+        "tuk",
+        "tur",
+        "twi",
+        "uig",
+        "ukr",
+        "urd",
+        "uzb",
+        "ven",
+        "vie",
+        "vol",
+        "wln",
+        "wol",
+        "xho",
+        "yid",
+        "yor",
+        "zha",
+        "zho",
+        "zul"
+      ],
+      "title": "Language",
+      "description": "Language of the metadata expressed using ISO 639-3.",
+      "examples": [
+        "eng"
+      ]
+    },
+    "License": {
+      "type": "object",
+      "title": "License",
+      "properties": {
+        "license_ref": {
+          "type": "string",
+          "format": "url",
+          "title": "License Reference",
+          "description": "Link to license document.",
+          "examples": [
+            "https://creativecommons.org/licenses/by/4.0/"
+          ]
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date",
+          "title": "Start Date",
+          "description": "If date is set in the future, it indicates embargo period. Encoded using the relevant ISO 8601 Date compliant string.",
+          "examples": [
+            "2019-06-30"
+          ]
+        }
+      },
+      "required": [
+        "license_ref",
+        "start_date"
+      ]
+    },
+    "Licenses": {
+      "type": "array",
+      "title": "Licenses",
+      "description": "To list all licenses applied to a specific distribution of data.",
+      "items": {
+        "$ref": "#/$defs/License"
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "title": "Metadata",
+      "properties": {
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "To provide any details on the choice of the metadata standard",
+          "examples": [
+            "The ISO 19115 Metadata Standard is applied to describe each geospatial dataset. Metadata includes the satellite's sensor type (e.g. Landsat 8 OLI), acquisition date, spatial resolution (30m), and cloud cover percentage."
+          ]
+        },
+        "language": {
+          "$ref": "#/$defs/LanguageCode"
+        },
+        "metadata_standard_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/MetadataStandardID"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/MetadataStandardID"
+              },
+              "minItems": 1
+            }
+          ]
+        }
+      },
+      "required": [
+        "language",
+        "metadata_standard_id"
+      ]
+    },
+    "MetadataStandardID": {
+      "type": "object",
+      "title": "Metadata Standard ID",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "http://www.dublincore.org/specifications/dublin-core/dcmi-terms/"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "url",
+            "other"
+          ],
+          "title": "Type",
+          "description": "Identifier type. Suggested values: url",
+          "examples": [
+            "url"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "PIDSystems": {
+      "type": "array",
+      "title": "PID System",
+      "description": "PID system(s). Allowed values: ark, arxiv, bibcode, doi, ean13, eissn, handle, igsn, isbn, issn, istc, lissn, lsid, pmid, purl, upc, url, urn, other",
+      "items": {
+        "$ref": "#/$defs/PIDSystemType"
+      }
+    },
+    "PIDSystemType": {
+      "type": "string",
+      "title": "PID System Type",
+      "enum": [
+        "ark",
+        "arxiv",
+        "bibcode",
+        "doi",
+        "ean13",
+        "eissn",
+        "handle",
+        "igsn",
+        "isbn",
+        "issn",
+        "istc",
+        "lissn",
+        "lsid",
+        "pmid",
+        "purl",
+        "upc",
+        "url",
+        "urn",
+        "other"
+      ],
+      "examples": [
+        "doi"
+      ]
+    },
+    "Project": {
+      "type": "object",
+      "title": "Project",
+      "properties": {
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "Project abstract providing an overview of the project's goals and scope",
+          "examples": [
+            "This project aims to analyze the impact of urbanization on local biodiversity by collecting and assessing environmental data from multiple urban centers. Using remote sensing, field observations, and statistical modeling, the study will identify key factors influencing species diversity and habitat loss. The findings will support sustainable urban planning initiatives and inform conservation strategies."
+          ]
+        },
+        "end": {
+          "type": "string",
+          "format": "date",
+          "title": "End",
+          "description": "Project end date. Encoded using the relevant ISO 8601 Date compliant string",
+          "examples": [
+            "2020-03-31"
+          ]
+        },
+        "funding": {
+          "$ref": "#/$defs/Fundings"
+        },
+        "project_id": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProjectID"
+          },
+          "minItems": 0
+        },
+        "start": {
+          "type": "string",
+          "format": "date",
+          "title": "Start",
+          "description": "Project start date. Encoded using the relevant ISO 8601 Date compliant string",
+          "examples": [
+            "2019-04-01"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "title": "Title",
+          "description": "Project title",
+          "examples": [
+            "Our New Project"
+          ]
+        }
+      },
+      "required": [
+        "title"
+      ]
+    },
+    "ProjectID": {
+      "type": "object",
+      "title": "Project ID",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "https://example.org/project"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Identifier type. Suggested values: doi, raid, url",
+          "examples": [
+            "url",
+            "doi",
+            "raid"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "RelatedIdentifier": {
+      "type": "object",
+      "title": "Related Identifier",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "https://example.com/"
+          ]
+        },
+        "metadata_scheme": {
+          "type": "string",
+          "title": "Metadata Scheme",
+          "description": "Name of the related metadata schema (if applicable)",
+          "examples": [
+            "DDI-L"
+          ]
+        },
+        "relation_type": {
+          "type": "string",
+          "title": "Relation Type",
+          "description": "Type of relation between the resource and the related resource, suggested values from DataCite relationType: https://datacite-metadata-schema.readthedocs.io/en/4.5/appendices/appendix-1/relationType/",
+          "examples": [
+            "HasMetadata"
+          ]
+        },
+        "resource_type": {
+          "type": "string",
+          "title": "Resource Type",
+          "description": "Type of the related resource, suggested values from DataCite resourceTypeGeneral: https://datacite-metadata-schema.readthedocs.io/en/4.5/appendices/appendix-1/resourceTypeGeneral/",
+          "examples": [
+            "Model"
+          ]
+        },
+        "scheme_type": {
+          "type": "string",
+          "title": "Scheme Type",
+          "description": "Type of the related metadata scheme linked with scheme URI (if applicable)",
+          "examples": [
+            "XSD"
+          ]
+        },
+        "scheme_uri": {
+          "type": "string",
+          "format": "uri",
+          "title": "Scheme URI",
+          "description": "Link to the scheme of the identifier (if applicable)",
+          "examples": [
+            "http://www.ddialliance.org/Specification/DDI-Lifecycle/3.1/XMLSchema/instance.xsd"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Type of the identifier, suggested values from DataCite relatedIdentifierType: https://datacite-metadata-schema.readthedocs.io/en/4.5/appendices/appendix-1/relatedIdentifierType/",
+          "examples": [
+            "url"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type",
+        "relation_type"
+      ]
+    },
+    "SecurityAndPrivacyItem": {
+      "type": "object",
+      "title": "Security and Policy",
+      "properties": {
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "Describe a security and privacy measure applied to a dataset to protect sensitive information",
+          "examples": [
+            "The dataset undergoes anonymization by applying data masking techniques. Names, addresses, and phone numbers are replaced with pseudonyms or randomly generated identifiers. Specific details, such as exact birthdates, are generalized into age ranges."
+          ]
+        },
+        "title": {
+          "type": "string",
+          "title": "Title",
+          "description": "Title a measure applied to a dataset",
+          "examples": [
+            "Anonymization of Personally Identifiable Data"
+          ]
+        }
+      },
+      "required": [
+        "title"
+      ]
+    },
+    "SecurityAndPrivacyItems": {
+      "type": "array",
+      "title": "Security and Policy Items",
+      "description": "To list all issues and requirements related to security and privacy",
+      "items": {
+        "$ref": "#/$defs/SecurityAndPrivacyItem"
+      }
+    },
+    "TechnicalResource": {
+      "type": "object",
+      "title": "Technical Resource",
+      "properties": {
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "Describe a technical resource (e.g. tools or software) required for any stage of a dataset lifecycle (e.g. microscopes, sensors, Jupyter Notebook, Galaxy workflows, measuring devices)",
+          "examples": [
+            "The Celestron 44102 Inverted Biological Microscope was used to examine biological samples, such as cells and microorganisms, with high-resolution optics."
+          ]
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Name a resource applied to a dataset",
+          "examples": [
+            "Celestron Microscope"
+          ]
+        },
+        "technical_resource_id": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TechnicalResourceID"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "TechnicalResourceID": {
+      "type": "object",
+      "title": "Technical Resource ID",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "title": "Identifier",
+          "examples": [
+            "https://example.org/resource"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "title": "Type",
+          "description": "Identifier type. Suggested values: url",
+          "examples": [
+            "url",
+            "doi",
+            "other"
+          ]
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ]
+    },
+    "TechnicalResources": {
+      "type": "array",
+      "title": "Technical Resources",
+      "description": "To list all technical resources needed to implement a DMP",
+      "items": {
+        "$ref": "#/$defs/TechnicalResource"
+      }
     }
-  },
-  "additionalProperties": false,
-  "required": ["dmp"]
+  }
 }

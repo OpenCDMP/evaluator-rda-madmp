@@ -4,11 +4,13 @@ import gr.cite.tools.exception.MyApplicationException;
 import gr.cite.tools.logging.LoggerService;
 import org.apache.commons.io.IOUtils;
 import org.everit.json.schema.Schema;
+import org.everit.json.schema.SchemaException;
 import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opencdmp.commonmodels.enums.PluginEntityType;
+import org.opencdmp.evaluator.rdamadmp.service.storage.FileStorageService;
 import org.opencdmp.evaluatorbase.enums.RankType;
 import org.opencdmp.evaluatorbase.enums.SuccessStatus;
 import org.opencdmp.evaluatorbase.interfaces.BenchmarkConfiguration;
@@ -38,21 +40,40 @@ public class EvaluatorService implements EvaluatorClient {
     private static final LoggerService logger = new LoggerService(LoggerFactory.getLogger(EvaluatorService.class));
     private final EvaluatorRdaMaDmpServiceProperties evaluatorRdaMaDmpServiceProperties;
     private final ResourceLoader resourceLoader;
+    private final FileStorageService storageService;
+
+    private static volatile Schema rdaSchema;
 
     private byte[] logo;
 
     @Autowired
-    public EvaluatorService(ResourceLoader resourceLoader, EvaluatorRdaMaDmpServiceProperties evaluatorRdaMaDmpServiceProperties) {
+    public EvaluatorService(ResourceLoader resourceLoader, EvaluatorRdaMaDmpServiceProperties evaluatorRdaMaDmpServiceProperties, FileStorageService storageService) {
         this.evaluatorRdaMaDmpServiceProperties = evaluatorRdaMaDmpServiceProperties;
         this.resourceLoader = resourceLoader;
+        this.storageService = storageService;
     }
 
 
     @Override
-    public RankResultModel rankPlan(PlanEvaluationModel plan) {
-        if (plan == null || plan.getPlanModel() == null || plan.getPlanModel().getRdaJsonFile() == null ||  plan.getPlanModel().getRdaJsonFile().getFile() == null) throw new MyApplicationException("rda file not found!");
+    public List<RankResultModel> rankPlan(PlanEvaluationModel plan) {
+        if (plan == null || plan.getPlanModel() == null || plan.getPlanModel().getRdaJsonFile() == null) throw new MyApplicationException("rda file not found!");
+
+        byte[] rdaJsonFile;
+        if (this.evaluatorRdaMaDmpServiceProperties.isUseSharedStorage()) rdaJsonFile = plan.getPlanModel().getRdaJsonFile().getFileRef() == null ? null : this.storageService.readFile(plan.getPlanModel().getRdaJsonFile().getFileRef());
+        else rdaJsonFile = plan.getPlanModel().getRdaJsonFile().getFile();
+        if (rdaJsonFile == null) throw new MyApplicationException("rda file not found!");
 
         if (plan.getBenchmarkIds() == null || plan.getBenchmarkIds().isEmpty()) throw new MyApplicationException("benchmark ids are empty!");
+
+        Schema schema = this.getRdaSchema();
+
+        JSONObject planRdaJsonFile = null;
+        String invalidJsonMessage = null;
+        try {
+            planRdaJsonFile = new JSONObject(new String(rdaJsonFile, StandardCharsets.UTF_8));
+        } catch (JSONException e) {
+            invalidJsonMessage = "The RDA file is not a valid JSON object: " + e.getMessage();
+        }
 
         RankResultModel rankModel = new RankResultModel();
         rankModel.setRank(1);
@@ -60,57 +81,40 @@ public class EvaluatorService implements EvaluatorClient {
         List<EvaluationResultModel> results = new ArrayList<>();
         for (String benchmarkId: plan.getBenchmarkIds()) {
 
-            BenchmarkConfiguration benchmarkConfiguration = this.evaluatorRdaMaDmpServiceProperties.getAvailableBenchmarks().stream().filter(x -> x.getId().equals(benchmarkId)).findFirst().orElse(null);
+            BenchmarkConfiguration benchmarkConfiguration = this.evaluatorRdaMaDmpServiceProperties.getAvailableBenchmarks() == null ? null : this.evaluatorRdaMaDmpServiceProperties.getAvailableBenchmarks().stream().filter(x -> x.getId().equals(benchmarkId)).findFirst().orElse(null);
 
             if (benchmarkConfiguration == null) throw new MyApplicationException("not found benchmark config with id " + benchmarkId);
 
-            if (!benchmarkConfiguration.getAppliesTo().contains(PluginEntityType.Plan)) throw new MyApplicationException("benchmark don't apply to plan");
+            if (benchmarkConfiguration.getAppliesTo() == null || !benchmarkConfiguration.getAppliesTo().contains(PluginEntityType.Plan)) throw new MyApplicationException("benchmark don't apply to plan");
 
 
             EvaluationResultModel benchmarkResult = new EvaluationResultModel();
             benchmarkResult.setBenchmarkTitle(benchmarkConfiguration.getLabel());
             benchmarkResult.setRank(1);
 
-            JSONObject rawSchema = null;
-            JSONObject planRdaJsonFile = null;
-            try {
-                planRdaJsonFile = new JSONObject(new String(plan.getPlanModel().getRdaJsonFile().getFile(), StandardCharsets.UTF_8));
-
-                try {
-                    Resource resource = this.resourceLoader.getResource(this.evaluatorRdaMaDmpServiceProperties.getRdaSchema());
-                    if (!resource.isReadable()) return null;
-                    try (InputStream inputStream = resource.getInputStream()) {
-                        String jsonTxt = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-                        rawSchema = new JSONObject(jsonTxt);
-                    }
-                } catch (IOException e) {
-                    logger.error(e.getMessage(), e);
-                    throw new RuntimeException(e);
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-
-            SchemaLoader loader = SchemaLoader.builder()
-                    .schemaJson(rawSchema)
-                    .draftV7Support()
-                    .build();
-            Schema schema = loader.load().build();
-            if (schema == null) throw new MyApplicationException("json schema not found");
-
             List<EvaluationResultMetricModel> metrics = new ArrayList<>();
             List<EvaluationResultMessageModel> message = new ArrayList<>();
             EvaluationResultMetricModel metric = new EvaluationResultMetricModel();
 
-            try {
-                schema.validate(planRdaJsonFile);
+            List<String> errors = new ArrayList<>();
+            if (planRdaJsonFile == null) {
+                errors.add(invalidJsonMessage);
+            } else {
+                try {
+                    schema.validate(planRdaJsonFile);
+                } catch (ValidationException e) {
+                    errors.addAll(e.getAllMessages());
+                }
+            }
+
+            if (errors.isEmpty()) {
                 metric.setRank(1);
-            } catch (ValidationException e) {
+            } else {
                 metric.setRank(0);
                 rankModel.setRank(0);
                 benchmarkResult.setRank(0);
                 int i = 1;
-                for (String error : e.getAllMessages()) {
+                for (String error : errors) {
                     EvaluationResultMessageModel errorMessage = new EvaluationResultMessageModel();
                     errorMessage.setTitle("Error " + i);
                     errorMessage.setMessage(error);
@@ -129,11 +133,35 @@ public class EvaluatorService implements EvaluatorClient {
         }
         if (!results.isEmpty()) rankModel.setResults(results);
 
-        return rankModel;
+        return List.of(rankModel);
+    }
+
+    private Schema getRdaSchema() {
+        if (rdaSchema == null) {
+            synchronized (EvaluatorService.class) {
+                if (rdaSchema == null) {
+                    Resource resource = this.resourceLoader.getResource(this.evaluatorRdaMaDmpServiceProperties.getRdaSchema());
+                    if (!resource.isReadable()) throw new MyApplicationException("rda schema is not readable: " + this.evaluatorRdaMaDmpServiceProperties.getRdaSchema());
+                    try (InputStream inputStream = resource.getInputStream()) {
+                        JSONObject rawSchema = new JSONObject(IOUtils.toString(inputStream, StandardCharsets.UTF_8));
+                        // everit-json-schema supports up to draft 7; the RDA schema declares 2020-12 but uses no 2020-12-only keywords
+                        rdaSchema = SchemaLoader.builder()
+                                .schemaJson(rawSchema)
+                                .draftV7Support()
+                                .build()
+                                .load().build();
+                    } catch (IOException | JSONException | SchemaException e) {
+                        logger.error(e.getMessage(), e);
+                        throw new MyApplicationException("rda schema could not be loaded: " + this.evaluatorRdaMaDmpServiceProperties.getRdaSchema());
+                    }
+                }
+            }
+        }
+        return rdaSchema;
     }
 
     @Override
-    public RankResultModel rankDescription(DescriptionEvaluationModel description) {
+    public List<RankResultModel> rankDescription(DescriptionEvaluationModel description) {
         throw new UnsupportedOperationException("rank description not supported");
     }
 
@@ -159,6 +187,7 @@ public class EvaluatorService implements EvaluatorClient {
         evaluatorConfiguration.getRankConfig().getSelectionConfiguration().setValueSetList(Arrays.asList(valueSetSuccess, valueSetFail));
 
         evaluatorConfiguration.setAvailableBenchmarks(this.evaluatorRdaMaDmpServiceProperties.getAvailableBenchmarks());
+        evaluatorConfiguration.setAvailableTests(this.evaluatorRdaMaDmpServiceProperties.getAvailableTests());
         return evaluatorConfiguration;
     }
 

@@ -2,6 +2,7 @@ package org.opencdmp.evaluator.rdamadmp.service.evaluator;
 
 import org.opencdmp.commonmodels.models.ConfigurationField;
 import org.opencdmp.evaluatorbase.interfaces.BenchmarkConfiguration;
+import org.opencdmp.evaluatorbase.interfaces.TestConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class EvaluatorRdaMaDmpServiceProperties {
 	private List<ConfigurationField> configurationFields;
 	private List<ConfigurationField> userConfigurationFields;
 	private List<BenchmarkConfiguration> availableBenchmarks;
+	private List<TestConfiguration> availableTests;
 
 	public String getEvaluatorId() {
 		return evaluatorId;
@@ -80,5 +82,13 @@ public class EvaluatorRdaMaDmpServiceProperties {
 
 	public void setAvailableBenchmarks(List<BenchmarkConfiguration> availableBenchmarks) {
 		this.availableBenchmarks = availableBenchmarks;
+	}
+
+	public List<TestConfiguration> getAvailableTests() {
+		return availableTests;
+	}
+
+	public void setAvailableTests(List<TestConfiguration> availableTests) {
+		this.availableTests = availableTests;
 	}
 }

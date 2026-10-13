@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,31 +35,31 @@ public class EvaluatorController implements org.opencdmp.evaluatorbase.interface
     }
 
     @Override
-    public RankResultModel rankPlan(@RequestBody PlanEvaluationModel planModel) {
+    public List<RankResultModel> rankPlan(@RequestBody PlanEvaluationModel planModel) {
 
          logger.debug(new MapLogEntry("rankPlan" + PlanModel.class.getSimpleName()).And("planModel", planModel));
 
-        RankResultModel model  = evaluatorClient.rankPlan(planModel);
+        List<RankResultModel> models  = evaluatorClient.rankPlan(planModel);
 
         this.auditService.track(AuditableAction.Evaluator_RankPlan, Map.ofEntries(
                 new AbstractMap.SimpleEntry<String, Object>("planModel", planModel)
         ));
 
-        return model;
+        return models;
     }
 
     @Override
-    public RankResultModel rankDescription(@RequestBody DescriptionEvaluationModel descriptionModel) {
+    public List<RankResultModel> rankDescription(@RequestBody DescriptionEvaluationModel descriptionModel) {
 
         logger.debug(new MapLogEntry("rankDescription " + DescriptionModel.class.getSimpleName()).And("descriptionModel", descriptionModel));
 
-        RankResultModel model = evaluatorClient.rankDescription(descriptionModel);
+        List<RankResultModel> models = evaluatorClient.rankDescription(descriptionModel);
 
         this.auditService.track(AuditableAction.Evaluator_RankDescription, Map.ofEntries(
                 new AbstractMap.SimpleEntry<String, Object>("descriptionModel", descriptionModel)
         ));
 
-        return model;
+        return models;
     }
 
     @Override

@@ -1,0 +1,3 @@
+file:
+  storage:
+    transient-path: ${STORAGE_PATH}/shared

@@ -1,13 +1,13 @@
 # OpenCDMP RDA maDMP evaluator
 
-**evaluator-rda-madmp** checks a plan's RDA JSON export against the JSON schema of the [RDA DMP Common Standard](https://github.com/RDA-DMP-Common/RDA-DMP-Common-Standard) for machine-actionable Data Management Plans (maDMPs), version 1.2. It reports whether the export is valid and lists every schema violation it finds.
+**evaluator-rda-madmp** checks a plan's RDA JSON export against the JSON schema of the [RDA DMP Common Standard](https://github.com/RDA-DMP-Common/RDA-DMP-Common-Standard) for machine-actionable Data Management Plans (maDMPs), version 1.3. It reports whether the export is valid and lists every schema violation it finds.
 
 It is an evaluator plugin for [OpenCDMP](https://github.com/OpenCDMP/OpenCDMP), the open platform for Data Management Plans and other Output Management Plans: a user starts an evaluation from a plan, OpenCDMP calls the evaluator over HTTP, and the result appears in OpenCDMP. The service implements the interfaces of [evaluator-base](https://github.com/OpenCDMP/evaluator-base); its evaluator id is `rda-maDMP`. See [Evaluator services](https://opencdmp.github.io/optional-services/evaluator-services/#evaluator-rda-madmp) in the OpenCDMP documentation.
 
 ## What it checks
 
 - OpenCDMP sends the plan's RDA JSON export, produced by the [RDA JSON file transformer](https://github.com/OpenCDMP/file-transformer-rda-json). The evaluator reads only that file.
-- The file is validated against the maDMP 1.2 JSON schema bundled with the service. The check runs locally and calls no external service.
+- The file is validated against the maDMP 1.3 JSON schema bundled with the service. The check runs locally and calls no external service.
 - The evaluator offers one benchmark, `RDA MADMP Schema Validation`. The plan passes (rank `1`) when the export has no schema violations and fails (rank `0`) otherwise. Each violation becomes one message, for example `#/dmp: required key [dataset] not found`.
 - Only plans can be evaluated. Asset evaluation (`/rank/description`) is not supported.
 
@@ -54,7 +54,7 @@ The service reads its settings from environment variables. It needs the [setting
 
 | Variable | Purpose | Default |
 | --- | --- | --- |
-| `RDA_MADMP_RDA_SCHEMA` | JSON schema that plans are validated against | `classpath:schema/rda-schema.json` (maDMP 1.2) |
+| `RDA_MADMP_RDA_SCHEMA` | JSON schema that plans are validated against | `classpath:schema/rda-schema.json` (maDMP 1.3) |
 | `RDA_MADMP_HAS_LOGO`, `RDA_MADMP_LOGO_PATH` | Logo shown next to the evaluator in OpenCDMP | `true`, `classpath:rda.png` |
 | `RDA_MADMP_USE_SHARED_STORAGE`, `STORAGE_PATH` | Receive the RDA JSON file through a folder shared with OpenCDMP, not in the request body | `false` |
 

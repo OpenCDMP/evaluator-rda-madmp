@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/RDA-DMP-Common/RDA-DMP-Common-Standard/tree/master/examples/JSON/JSON-schema/1.2",
+  "$id": "https://github.com/RDA-DMP-Common/RDA-DMP-Common-Standard/tree/master/examples/JSON/JSON-schema/1.3",
   "title": "RDA DMP Common Standard for machine-actionable Data Management Plans",
   "description": "This is a metadata application profile to provide basic interoperability between systems producing or consuming machine-actionable data management plans (maDMPS). Further fields can be added in specific deployments, but they do not guarantee interoperability. DMP tools can use any other fields in their internal data models.\n\nThis application profile is intended to cover a wide range of use cases and does not set any business (e.g. funder specific) requirements. It represents information over the whole DMP lifecycle.",
   "type": "object",
@@ -53,8 +53,8 @@
         }
       },
       "required": [
-        "identifier",
-        "type"
+          "identifier",
+          "type"
       ]
     },
     "AlternateIdentifier": {
@@ -80,8 +80,8 @@
         }
       },
       "required": [
-        "identifier",
-        "type"
+          "identifier",
+          "type"
       ]
     },
     "Booleanish": {
@@ -382,8 +382,8 @@
         }
       },
       "required": [
-        "creator_id",
-        "name"
+          "creator_id",
+          "name"
       ]
     },
     "CreatorID": {
@@ -407,8 +407,8 @@
         }
       },
       "required": [
-        "identifier",
-        "type"
+          "identifier",
+          "type"
       ]
     },
     "CurrencyCode": {
@@ -846,11 +846,12 @@
       "type": "string",
       "enum": [
         "open",
-        "shared",
-        "closed"
+        "restricted",
+        "closed",
+        "shared"
       ],
       "title": "Data Access",
-      "description": "Indicates access mode for data. Allowed values: open, shared, closed",
+      "description": "Indicates access mode for data. Allowed values: open, restricted, closed. The value shared is deprecated, use restricted instead; it will be removed in the next major version.",
       "examples": [
         "open"
       ]
@@ -905,8 +906,8 @@
         },
         "is_reused": {
           "type": "boolean",
-          "title": "The Dataset Is Reused Schema",
-          "description": "Indicates if the dataset is reused, i.e., not produced in project(s) covered by this DMP.",
+          "title": "Is Reused",
+          "description": "Indicates if the dataset is reused, i.e., not produced in project(s) covered by this DMP. To link a dataset produced in the project to the reused data it is derived from, use related_identifier (e.g. with relation type IsDerivedFrom).",
           "examples": [
             true
           ]
@@ -1284,17 +1285,17 @@
         "identifier": {
           "type": "string",
           "title": "Identifier",
-          "description": "Funder ID, recommended to use CrossRef Funder Registry. See: https://www.crossref.org/services/funder-registry/",
+          "description": "Funder ID, recommended to use ROR (https://ror.org), which is replacing the Crossref Funder Registry (https://www.crossref.org/services/funder-registry/)",
           "examples": [
-            "501100002428"
+            "013tf3c58"
           ]
         },
         "type": {
           "type": "string",
           "title": "Type",
-          "description": "Identifier type. Suggested values: fundref, url",
+          "description": "Identifier type. Suggested values: ror, fundref, url",
           "examples": [
-            "fundref"
+            "ror"
           ]
         }
       },
@@ -1393,7 +1394,7 @@
         "backup_type": {
           "type": "string",
           "title": "Backup Type",
-          "description": "Location and/or type of the backup provided by a host",
+          "description": "Type of the backup provided by a host.",
           "examples": [
             "tapes"
           ]
@@ -1413,6 +1414,8 @@
         },
         "host_id": {
           "type": "array",
+          "title": "Host ID",
+          "description": "Persistent identifier of a host, e.g. its re3data identifier. It identifies the host itself; use url to provide the address where the host can be accessed.",
           "items": {
             "$ref": "#/$defs/HostID"
           },
@@ -1424,9 +1427,9 @@
         "storage_type": {
           "type": "string",
           "title": "Storage Type",
-          "description": "To indicate whether a host supports versioning of data distributions.",
+          "description": "The type of storage medium or system used to store the data.",
           "examples": [
-            "External Hard Drive"
+            "object storage"
           ]
         },
         "support_versioning": {
@@ -1443,15 +1446,14 @@
           "type": "string",
           "format": "url",
           "title": "URL",
-          "description": "A URL of an infrastructure hosting a distribution of a dataset",
+          "description": "A URL where the infrastructure hosting a distribution of a dataset can be accessed, e.g. the landing page of a repository. To identify the host persistently, use host_id.",
           "examples": [
             "https://zenodo.org"
           ]
         }
       },
       "required": [
-        "title",
-        "url"
+        "title"
       ]
     },
     "HostID": {
@@ -1461,16 +1463,17 @@
         "identifier": {
           "type": "string",
           "title": "Identifier",
+          "description": "To indicate the specific value of an identifier for a host",
           "examples": [
-            "http://example.org/repo"
+            "https://doi.org/10.17616/R3QP53"
           ]
         },
         "type": {
           "type": "string",
           "title": "Type",
-          "description": "Identifier type. Suggested values: url",
+          "description": "Identifier type. Suggested values: re3data, doi, url",
           "examples": [
-            "url"
+            "re3data"
           ]
         }
       },
@@ -1784,7 +1787,7 @@
     "PIDSystems": {
       "type": "array",
       "title": "PID System",
-      "description": "PID system(s). Allowed values: ark, arxiv, bibcode, doi, ean13, eissn, handle, igsn, isbn, issn, istc, lissn, lsid, pmid, purl, upc, url, urn, other",
+      "description": "PID system(s). Suggested values: ark, arxiv, bibcode, doi, ean13, eissn, handle, igsn, isbn, issn, istc, lissn, lsid, pmid, purl, upc, url, urn, other",
       "items": {
         "$ref": "#/$defs/PIDSystemType"
       }
@@ -1792,27 +1795,7 @@
     "PIDSystemType": {
       "type": "string",
       "title": "PID System Type",
-      "enum": [
-        "ark",
-        "arxiv",
-        "bibcode",
-        "doi",
-        "ean13",
-        "eissn",
-        "handle",
-        "igsn",
-        "isbn",
-        "issn",
-        "istc",
-        "lissn",
-        "lsid",
-        "pmid",
-        "purl",
-        "upc",
-        "url",
-        "urn",
-        "other"
-      ],
+      "description": "PID system type. Suggested values: ark, arxiv, bibcode, doi, ean13, eissn, handle, igsn, isbn, issn, istc, lissn, lsid, pmid, purl, upc, url, urn, other",
       "examples": [
         "doi"
       ]

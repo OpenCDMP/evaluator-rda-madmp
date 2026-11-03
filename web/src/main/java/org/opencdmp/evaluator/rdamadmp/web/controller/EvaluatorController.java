@@ -42,7 +42,7 @@ public class EvaluatorController implements org.opencdmp.evaluatorbase.interface
         List<RankResultModel> models  = evaluatorClient.rankPlan(planModel);
 
         this.auditService.track(AuditableAction.Evaluator_RankPlan, Map.ofEntries(
-                new AbstractMap.SimpleEntry<String, Object>("planModel", planModel)
+                new AbstractMap.SimpleEntry<String, Object>("planId", planModel.getPlanModel().getId())
         ));
 
         return models;
@@ -56,7 +56,7 @@ public class EvaluatorController implements org.opencdmp.evaluatorbase.interface
         List<RankResultModel> models = evaluatorClient.rankDescription(descriptionModel);
 
         this.auditService.track(AuditableAction.Evaluator_RankDescription, Map.ofEntries(
-                new AbstractMap.SimpleEntry<String, Object>("descriptionModel", descriptionModel)
+                new AbstractMap.SimpleEntry<String, Object>("descriptionId", descriptionModel.getDescriptionModel().getId())
         ));
 
         return models;
